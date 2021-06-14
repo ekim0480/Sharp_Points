@@ -169,7 +169,7 @@ $(document).ready(function () {
         url: "/sales/" + id,
       }).then(function () {
         // refresh page
-        location.reload;
+        location.reload();
       });
     }
   }
