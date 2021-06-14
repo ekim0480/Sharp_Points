@@ -97,7 +97,9 @@ $(document).ready(function () {
       $.ajax({
         method: "DELETE",
         url: "/customers/" + id,
-      }).then(getCustomers);
+      }).then(function(){
+        location.reload();
+      });
     }
   }
 });
