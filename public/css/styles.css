@@ -1,0 +1,47 @@
+.forms {
+  margin-top: 50px;
+}
+
+#phoneSearchDiv {
+  width: 550px;
+}
+
+#customerAddDiv {
+  width: 550px;
+}
+button.submit {
+  float: right;
+}
+
+#customerDetailsContainer {
+  margin-top: 50px;
+}
+.customer-container {
+  margin-top: 50px;
+}
+
+.customer-list {
+  margin-top: 25px;
+}
+
+#sale-container {
+  margin-top: 50px;
+  width: 100%;
+}
+
+.sale {
+  margin-top: 30px;
+}
+
+.regInput {
+  width: 300px;
+}
+.bigInput {
+  width: 80%;
+}
+
+#customer-name {
+  width: 100%;
+  height: 35px;
+  margin-top: 5px;
+}
