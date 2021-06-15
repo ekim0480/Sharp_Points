@@ -25,6 +25,16 @@
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
+    <!-- function to allow only 2 decimal places in sale amount input -->
+    <script>
+      var validate = function (e) {
+        var t = e.value;
+        e.value =
+          t.indexOf(".") >= 0
+            ? t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)
+            : t;
+      };
+    </script>
     <title>Update Sale</title>
   </head>
   <body>
@@ -145,7 +155,8 @@
           <div class="mb-3">
             <label for="saleAmountInput" class="form-label">Sale Amount</label>
             <input
-              type="text"
+              step=".01"
+              type="number"
               name="saleAmount"
               id="saleAmountInput"
               class="form-control regInput"
@@ -155,7 +166,7 @@
           <div class="mb-3">
             <label for="pointsInput" class="form-label">Points</label>
             <input
-              type="text"
+              type="number"
               name="points"
               id="pointsInput"
               class="form-control regInput"

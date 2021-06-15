@@ -41,6 +41,7 @@ $(document).ready(function () {
           // console.log(data);
           // tell user customer was added
           alert("Customer added!");
+          return;
         });
     }
 

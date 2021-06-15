@@ -2,6 +2,10 @@ $(document).ready(function () {
   // saleContainer holds all of our sales
   var saleContainer = $(".sale-container");
   var saleList = $("tbody");
+
+  // dom variable to display point total
+  var pointTotal = $("#pointTotal");
+
   // Click event for new sale and delete button
   $(document).on("click", "#deleteSale", handleSaleDelete);
   $(document).on("click", "#newSaleBtn", handleNewSale);
@@ -43,6 +47,9 @@ $(document).ready(function () {
       var li4 = document.createElement("li");
       var li5 = document.createElement("li");
       var li6 = document.createElement("li");
+
+      // display retrieved total point value
+      pointTotal.text(data.totalPoints);
 
       // set the text content of the list that will be printed
       li1.textContent = "ID: " + data.id;
@@ -108,12 +115,20 @@ $(document).ready(function () {
     return newTr;
   }
 
+  // function tallyPoints(sales) {
+  //   for (var i = 0; i < sales.length; i++){
+  //   console.log("Point values", parseInt(sales[i].points))
+  //   }
+  // }
+
+  // tallyPoints()
+
   // InitializeRows handles appending all of our constructed sale HTML inside saleContainer
+  // also adds all points and displays total value
   function initializeRows() {
     saleContainer.empty();
     var salesToAdd = [];
     for (var i = 0; i < sales.length; i++) {
-      //   console.log(salesToAdd)
       salesToAdd.push(createSaleRow(sales[i]));
     }
     renderSaleList(salesToAdd);

@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(20),
       allowNull: true,
     },
+    totalPoints: {
+      type: DataTypes.INTEGER(5).UNSIGNED.ZEROFILL,
+      defaultValue: "0",
+    },
   });
 
   // Telling our Customer model that each Customer can have many sales.

@@ -1,3 +1,11 @@
+h1 {
+  float: left;
+}
+
+h2 {
+  float: right;
+}
+
 .forms {
   margin-top: 50px;
 }

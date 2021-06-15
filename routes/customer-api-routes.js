@@ -52,6 +52,20 @@ module.exports = function (app) {
     });
   });
 
+  // route to add to customer's point total
+  app.put("/addPoints", function (req, res) {
+    // console.log("REQ BODY", req.body)
+    // console.log("this is what i want", req.body.finalPoints)
+    db.Customer.update(
+      // tell Customer table to update the column totalPoints:...
+      { totalPoints: req.body.finalPoints },
+      // only where the customer's id matches
+      { where: { id: req.body.customerId } }
+    ).then(function (updatedPoints) {
+      res.json(updatedPoints);
+    });
+  });
+
   // route to update a customer's information
   app.put("/customers", function (req, res) {
     // console.log("req body", req.body);

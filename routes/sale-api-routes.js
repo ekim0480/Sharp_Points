@@ -10,6 +10,7 @@ module.exports = function (app) {
     }
     db.Sale.findAll({
       where: query,
+      include: [db.Customer],
     }).then(function (dbSale) {
       res.json(dbSale);
     });
