@@ -23,6 +23,10 @@ h2 {
   margin-top: 50px;
 }
 
+#typeInput {
+  margin-left: 50px;
+}
+
 #phoneSearchDiv {
   width: 550px;
 }

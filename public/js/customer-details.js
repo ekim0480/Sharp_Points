@@ -100,15 +100,16 @@ $(document).ready(function () {
   // function to create rows for each sale and prepare them to be inserted into the sales table
   function createSaleRow(saleData) {
     // console.log(saleData);
-    // console.log(saleData.depCity)
+    // console.log(saleData.origin)
     var newTr = $("<tr>");
     newTr.data("sale", saleData);
-    newTr.append("<td>" + saleData.depCity + "</td>");
-    newTr.append("<td>" + saleData.depFlight + "</td>");
+    newTr.append("<td>" + saleData.type + "</td>");
+    newTr.append("<td>" + saleData.origin + "</td>");
+    newTr.append("<td>" + saleData.depDetails + "</td>");
     newTr.append("<td>" + saleData.depDate + "</td>");
-    newTr.append("<td>" + saleData.desCity + "</td>");
-    newTr.append("<td>" + saleData.retFlight + "</td>");
-    newTr.append("<td>" + saleData.retDate + "</td>");
+    newTr.append("<td>" + saleData.destination + "</td>");
+    newTr.append("<td>" + saleData.arrivalDetails + "</td>");
+    newTr.append("<td>" + saleData.arrivalDate + "</td>");
     newTr.append("<td>" + saleData.saleAmount + "</td>");
     newTr.append("<td>" + saleData.points + "</td>");
     // newTr.append("<td><a id='viewSale' style='cursor:pointer;color:green'>View</a></td>");
@@ -180,6 +181,7 @@ $(document).ready(function () {
     customerId = url.split("=")[1];
     // console.log("this is customer id", customerId);
 
+    // setting up a string with today's date
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, "0");
     var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -189,12 +191,20 @@ $(document).ready(function () {
 
     // console.log(today)
 
+    // parsing values we need into numbers for maths
     var parsedPointTotal = parseInt(pointTotal.text().trim());
     var parsedRedeemInput = parseInt($("#redeemPointsInput").val().trim());
 
+    // perform math
     var finalPointTotal = parsedPointTotal - parsedRedeemInput;
 
+    // set up a NEGATIVE points used value to be inserted
+    // so that upon deletion of this point redeem "sale"
+    // it will refund the points back to the customer
     var pointsUsed = -parsedRedeemInput;
+
+    // string to be inserted into notes section to log when
+    // points were used
     var usedPointsOn = "Used " + `${parsedRedeemInput}` + " on " + `${today}`;
 
     // console.log(pointTotal.text());
@@ -202,7 +212,9 @@ $(document).ready(function () {
     // console.log(parsedPointTotal);
     // console.log(finalPointTotal);
 
+    // set up object to be sent to database
     var updatedPoints = {
+      type: "Points",
       customerId: customerId,
       pointsUsed: pointsUsed,
       finalPoints: finalPointTotal,
@@ -210,6 +222,8 @@ $(document).ready(function () {
     };
 
     if (
+      // if input field is blank, not a number, or a negative value,
+      // alert and terminate function
       parsedRedeemInput == null ||
       isNaN(parsedRedeemInput) ||
       parsedRedeemInput < 0
@@ -217,18 +231,26 @@ $(document).ready(function () {
       console.log(parsedRedeemInput);
       alert("Please enter a valid amount.");
       return;
-    } else if (finalPointTotal < 0) {
+    } else if (
+      // if more points are used than exists,
+      // alert and terminate
+      finalPointTotal < 0
+    ) {
       console.log(finalPointTotal);
       alert("Point value may not exceed customer's total points!");
       return;
     } else {
-      console.log(parsedRedeemInput);
-      console.log(finalPointTotal);
+      // console.log(parsedRedeemInput);
+      // console.log(finalPointTotal);
 
+      // final confirmation prompt
       var finalConfirmation = confirm(
         "WARNING - Redeem " + `${parsedRedeemInput}` + " " + "points?"
       );
 
+      // if user confirms, make PUT call to update customer's remaining points,
+      // as well as create a blank sale noting when points were redeemed for
+      // tracking purposes
       if (finalConfirmation) {
         $.ajax({
           method: "PUT",
@@ -237,10 +259,10 @@ $(document).ready(function () {
           data: JSON.stringify(updatedPoints),
           dataType: "json",
         });
-        $.post("/usedPoints", updatedPoints)
-        .then(function () {
+        $.post("/usedPoints", updatedPoints).then(function () {
+          // if all is good, alert user of success and refresh page
           alert("Points redeemed!");
-          // location.reload()
+          location.reload();
         });
       }
     }
@@ -301,9 +323,9 @@ $(document).ready(function () {
   // function handleViewSale(){
   //   var listItemData = ($(this).parent("td").parent("tr").data("sale"))
   //   console.log(listItemData)
-  //   document.write('<html><body><p id="depCity"></p><p id="depFlight"></p><p id="depDate"></p></body></html>')
-  //   document.getElementById("depCity").innerHTML = "Departure City: " + listItemData.depCity
-  //   document.getElementById("depFlight").innerHTML = "Departing Flight: " + listItemData.depFlight
+  //   document.write('<html><body><p id="origin"></p><p id="depDetails"></p><p id="depDate"></p></body></html>')
+  //   document.getElementById("origin").innerHTML = "Departure City: " + listItemData.origin
+  //   document.getElementById("depDetails").innerHTML = "Departing Flight: " + listItemData.depDetails
   //   document.getElementById("depDate").innerHTML = "Departure Date: " + listItemData.depDate
   // }
 

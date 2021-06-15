@@ -72,26 +72,32 @@
               class="form-control regInput"
             />
           </div>
+          <div class="mb-3" id="selectDiv">
+            <label for="typeInput" class="form-label">Choose a Type</label>
+            <select id="typeInput" name="type" size="1">
+              <option value="Air">Air</option>
+              <option value="Tour">Tour</option>
+              <option value="Cruise">Cruise</option>
+            </select>
+          </div>
           <div class="mb-3">
-            <label for="depCityInput" class="form-label">Departing City</label>
+            <label for="originInput" class="form-label">Origin</label>
             <input
               type="text"
-              name="depCity"
-              id="depCityInput"
+              name="origin"
+              id="originInput"
               class="form-control regInput"
-              placeholder="Departing City"
             />
           </div>
           <div class="mb-3">
-            <label for="depFlightInput" class="form-label"
-              >Departing Flight</label
+            <label for="depDetailsInput" class="form-label"
+              >Departure Details</label
             >
             <input
               type="text"
-              name="depFlight"
-              id="depFlightInput"
+              name="depDetails"
+              id="depDetailsInput"
               class="form-control regInput"
-              placeholder="Departing Flight"
             />
           </div>
           <div class="mb-3">
@@ -106,35 +112,33 @@
             />
           </div>
           <div class="mb-3">
-            <label for="desCityInput" class="form-label"
-              >Destination City</label
-            >
+            <label for="destinationInput" class="form-label">Destination</label>
             <input
               type="text"
-              name="desCity"
-              id="desCityInput"
+              name="destination"
+              id="destinationInput"
               class="form-control regInput"
-              placeholder="Destination City"
             />
           </div>
           <div class="mb-3">
-            <label for="retFlightInput" class="form-label"
-              >Returning Flight</label
+            <label for="arrivalDetailsInput" class="form-label"
+              >Arrival Details</label
             >
             <input
               type="text"
-              name="retFlight"
-              id="retFlightInput"
+              name="arrivalDetails"
+              id="arrivalDetailsInput"
               class="form-control regInput"
-              placeholder="Returning Flight"
             />
           </div>
           <div class="mb-3">
-            <label for="retDateInput" class="form-label">Date of Return</label>
+            <label for="arrivalDateInput" class="form-label"
+              >Date of Arrival</label
+            >
             <input
               type="date"
-              name="retDate"
-              id="retDateInput"
+              name="arrivalDate"
+              id="arrivalDateInput"
               class="form-control regInput"
             />
           </div>
@@ -146,7 +150,6 @@
               name="saleAmount"
               id="saleAmountInput"
               class="form-control regInput"
-              placeholder="Sale Amount"
             />
           </div>
           <div class="mb-3">
@@ -159,7 +162,6 @@
               pattern=" 0+\.[0-9]*[1-9][0-9]*$"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               onpaste="let pasteData = event.clipboardData.getData('text'); if(pasteData){pasteData.replace(/[^0-9]*/g,'');} "
-              placeholder="Points"
             />
           </div>
           <div class="mb-3">

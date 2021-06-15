@@ -1,28 +1,38 @@
 module.exports = (sequelize, DataTypes) => {
   const Sale = sequelize.define("Sale", {
     // Giving the Sale model structure
-    depCity: {
-      type: DataTypes.STRING(20),
-      defaultValue: "Points",
+    type: {
+      type: DataTypes.STRING(10),
+      defaultValue: "",
       allowNull: true,
     },
-    depFlight: {
-      type: DataTypes.STRING(10),
+    origin: {
+      type: DataTypes.STRING(20),
+      defaultValue: "",
+      allowNull: true,
+    },
+    depDetails: {
+      type: DataTypes.STRING(20),
+      defaultValue: "",
       allowNull: true,
     },
     depDate: {
       type: DataTypes.STRING(15),
+      defaultValue: "",
     },
-    desCity: {
+    destination: {
       type: DataTypes.STRING(20),
+      defaultValue: "",
       allowNull: true,
     },
-    retFlight: {
-      type: DataTypes.STRING(10),
+    arrivalDetails: {
+      type: DataTypes.STRING(20),
+      defaultValue: "",
       allowNull: true,
     },
-    retDate: {
-      type: DataTypes.STRING,
+    arrivalDate: {
+      type: DataTypes.STRING(15),
+      defaultValue: "",
     },
     saleAmount: {
       type: DataTypes.DECIMAL(10, 2),
@@ -36,10 +46,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     notes: {
       type: DataTypes.TEXT,
+      defaultValue: "",
       allowNull: true,
     },
     remarks: {
       type: DataTypes.TEXT,
+      defaultValue: "",
       allowNull: true,
     },
     // usedPoints: {

@@ -73,32 +73,36 @@
       <form class="forms" id="saleAddForm">
         <div class="mb-3" id="saleAddDiv">
           <div class="mb-3">
-            <label for="depCityInput" class="form-label"
-              >Departing City (REQUIRED)</label
-            >
+            <label for="typeInput" class="form-label">Choose a Type</label>
+            <select id="typeInput" name="type" size="1">
+              <option value="Air">Air</option>
+              <option value="Tour">Tour</option>
+              <option value="Cruise">Cruise</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="originInput" class="form-label">Origin</label>
             <input
               type="text"
-              name="depCity"
-              id="depCityInput"
+              name="origin"
+              id="originInput"
               class="form-control regInput"
-              placeholder="Departing City"
             />
           </div>
           <div class="mb-3">
-            <label for="depFlightInput" class="form-label"
-              >Departing Flight (REQUIRED)</label
+            <label for="depDetailsInput" class="form-label"
+              >Departure Details</label
             >
             <input
               type="text"
-              name="depFlight"
-              id="depFlightInput"
+              name="depDetails"
+              id="depDetailsInput"
               class="form-control regInput"
-              placeholder="Departing Flight"
             />
           </div>
           <div class="mb-3">
             <label for="depDateInput" class="form-label"
-              >Date of Departure (REQUIRED)</label
+              >Date of Departure</label
             >
             <input
               type="date"
@@ -108,37 +112,33 @@
             />
           </div>
           <div class="mb-3">
-            <label for="desCityInput" class="form-label"
-              >Destination City (REQUIRED)</label
-            >
+            <label for="destinationInput" class="form-label">Destination</label>
             <input
               type="text"
-              name="desCity"
-              id="desCityInput"
+              name="destination"
+              id="destinationInput"
               class="form-control regInput"
-              placeholder="Destination City"
             />
           </div>
           <div class="mb-3">
-            <label for="retFlightInput" class="form-label"
-              >Returning Flight (REQUIRED)</label
+            <label for="arrivalDetailsInput" class="form-label"
+              >Arrival Details</label
             >
             <input
               type="text"
-              name="retFlight"
-              id="retFlightInput"
+              name="arrivalDetails"
+              id="arrivalDetailsInput"
               class="form-control regInput"
-              placeholder="Returning Flight"
             />
           </div>
           <div class="mb-3">
-            <label for="retDateInput" class="form-label"
-              >Date of Return (REQUIRED)</label
+            <label for="arrivalDateInput" class="form-label"
+              >Date of Arrival</label
             >
             <input
               type="date"
-              name="retDate"
-              id="retDateInput"
+              name="arrivalDate"
+              id="arrivalDateInput"
               class="form-control regInput"
             />
           </div>
@@ -147,10 +147,10 @@
             <input
               step=".01"
               type="number"
+              value="0"
               name="saleAmount"
               id="saleAmountInput"
               class="form-control regInput"
-              placeholder="Sale Amount"
             />
           </div>
           <div class="mb-3">
@@ -163,7 +163,6 @@
               min="0"
               pattern=" 0+\.[0-9]*[1-9][0-9]*$"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              placeholder="Points"
               onpaste="let pasteData = event.clipboardData.getData('text'); if(pasteData){pasteData.replace(/[^0-9]*/g,'');} "
             />
           </div>
@@ -175,7 +174,6 @@
               name="notes"
               id="notesInput"
               class="form-control bigInput"
-              placeholder="Notes"
             ></textarea>
           </div>
           <div class="mb-3">
@@ -186,7 +184,6 @@
               name="remarks"
               id="remarksInput"
               class="form-control bigInput"
-              placeholder="Remarks"
             ></textarea>
           </div>
         </div>

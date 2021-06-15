@@ -8,12 +8,13 @@ $(document).ready(function () {
   }
 
   // declaring dom variables
-  var depCityInput = $("#depCityInput");
-  var depFlightInput = $("#depFlightInput");
+  var typeInput = $("#typeInput");
+  var originInput = $("#originInput");
+  var depDetailsInput = $("#depDetailsInput");
   var depDateInput = $("#depDateInput");
-  var desCityInput = $("#desCityInput");
-  var retFlightInput = $("#retFlightInput");
-  var retDateInput = $("#retDateInput");
+  var destinationInput = $("#destinationInput");
+  var arrivalDetailsInput = $("#arrivalDetailsInput");
+  var arrivalDateInput = $("#arrivalDateInput");
   var saleAmountInput = $("#saleAmountInput");
   var pointsInput = $("#pointsInput");
   var notesInput = $("#notesInput");
@@ -77,70 +78,71 @@ $(document).ready(function () {
   function handleSaleFormSubmit(event) {
     event.preventDefault();
     // if any of the required fields are missing, alert and terminate function
-    if (
-      !depCityInput.val().trim().trim() ||
-      !depFlightInput.val().trim().trim() ||
-      !depDateInput.val().trim().trim() ||
-      !desCityInput.val().trim().trim() ||
-      !retFlightInput.val().trim().trim() ||
-      !retDateInput.val().trim().trim()
-    ) {
-      alert("You are missing a required field!");
-      return;
-    } else {
-      // otherwise...
-      // set variable for the id of the customer the sale belongs to
-      customerId = window.location.search.split("=")[1];
-      // console.log(customerId)
+    // if (
+    //   !originInput.val().trim().trim() ||
+    //   !depDetailsInput.val().trim().trim() ||
+    //   !depDateInput.val().trim().trim() ||
+    //   !destinationInput.val().trim().trim() ||
+    //   !arrivalDetailsInput.val().trim().trim() ||
+    //   !arrivalDateInput.val().trim().trim()
+    // ) {
+    //   alert("You are missing a required field!");
+    //   return;
+    // } else {
+    // otherwise...
+    // set variable for the id of the customer the sale belongs to
+    customerId = window.location.search.split("=")[1];
+    // console.log(customerId)
 
-      console.log("customerId", customerId);
-      console.log("initial points", initialPoints);
+    console.log("customerId", customerId);
+    console.log("initial points", initialPoints);
 
-      // convert points data from both the customer's original value
-      // we originally got, and the newly added sale's point value
-      // to numbers to perform mathmatic equation on them
-      var startingPoints = parseInt(initialPoints);
-      var earnedPoints = parseInt(pointsInput.val().trim());
-      // console.log("old points", startingPoints);
-      // console.log("earned points", earnedPoints);
+    // convert points data from both the customer's original value
+    // we originally got, and the newly added sale's point value
+    // to numbers to perform mathmatic equation on them
+    var startingPoints = parseInt(initialPoints);
+    var earnedPoints = parseInt(pointsInput.val().trim());
+    // console.log("old points", startingPoints);
+    // console.log("earned points", earnedPoints);
 
-      // perform the addition, and then reconvert the value back
-      // to a string to be sent to database.
-      var newPoints = (startingPoints + earnedPoints).toString();
-      // console.log("final points", newPoints);
+    // perform the addition, and then reconvert the value back
+    // to a string to be sent to database.
+    var newPoints = (startingPoints + earnedPoints).toString();
+    // console.log("final points", newPoints);
 
-      // creating newSale object to be sent
-      var newSale = {
-        depCity: depCityInput.val().trim(),
-        depFlight: depFlightInput.val().trim(),
-        depDate: depDateInput.val().trim(),
-        desCity: desCityInput.val().trim(),
-        retFlight: retFlightInput.val().trim(),
-        retDate: retDateInput.val().trim(),
-        saleAmount: saleAmountInput.val().trim(),
-        points: pointsInput.val().trim(),
-        notes: notesInput.val().trim(),
-        remarks: remarksInput.val().trim(),
-        finalPoints: newPoints,
-        customerId: customerId,
-      };
+    // creating newSale object to be sent
+    var newSale = {
+      type: typeInput.val().trim(),
+      origin: originInput.val().trim(),
+      depDetails: depDetailsInput.val().trim(),
+      depDate: depDateInput.val().trim(),
+      destination: destinationInput.val().trim(),
+      arrivalDetails: arrivalDetailsInput.val().trim(),
+      arrivalDate: arrivalDateInput.val().trim(),
+      saleAmount: saleAmountInput.val().trim(),
+      points: pointsInput.val().trim(),
+      notes: notesInput.val().trim(),
+      remarks: remarksInput.val().trim(),
+      finalPoints: newPoints,
+      customerId: customerId,
+    };
 
-      // make ajax put call to update the customer's total points with
-      // new sale included
-      $.ajax({
-        method: "PUT",
-        url: "/addPoints",
-        contentType: "application/json",
-        data: JSON.stringify(newSale),
-        dataType: "json",
-      });
+    // make ajax put call to update the customer's total points with
+    // new sale included
+    $.ajax({
+      method: "PUT",
+      url: "/addPoints",
+      contentType: "application/json",
+      data: JSON.stringify(newSale),
+      dataType: "json",
+    });
 
-      // make post call and send data in newSale object
-      $.post("/sales", newSale).then(function (data) {
-        // alert user of success and send them to the corresponding customer's details page
-        alert("Sale added!");
-        window.location.href = "/customerDetails?customer_id=" + customerId;
-      });
-    }
+    // make post call and send data in newSale object
+    $.post("/sales", newSale).then(function (data) {
+      // alert user of success and send them to the corresponding customer's details page
+      alert("Sale added!");
+      window.location.href = "/customerDetails?customer_id=" + customerId;
+    });
+    // }
   }
 });

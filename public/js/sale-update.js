@@ -20,12 +20,13 @@ $(document).ready(function () {
 
   // declaring dom variables
   var idInput = $("#idInput");
-  var depCityInput = $("#depCityInput");
-  var depFlightInput = $("#depFlightInput");
+  var typeInput = $("#typeInput");
+  var originInput = $("#originInput");
+  var depDetailsInput = $("#depDetailsInput");
   var depDateInput = $("#depDateInput");
-  var desCityInput = $("#desCityInput");
-  var retFlightInput = $("#retFlightInput");
-  var retDateInput = $("#retDateInput");
+  var destinationInput = $("#destinationInput");
+  var arrivalDetailsInput = $("#arrivalDetailsInput");
+  var arrivalDateInput = $("#arrivalDateInput");
   var saleAmountInput = $("#saleAmountInput");
   var pointsInput = $("#pointsInput");
   var notesInput = $("#notesInput");
@@ -46,14 +47,19 @@ $(document).ready(function () {
       console.log("Sale", data);
       console.log("customerid", data.Customer.id);
     }).then(function (data) {
+      // pre-select "type" option to match the sale's original type
+      console.log(data.type);
+      $("#typeInput").val(data.type).attr("selected", "selected");
+
       // pre-insert the sale's data into the corresponding input fields
       idInput.val(data.id);
-      depCityInput.val(data.depCity);
-      depFlightInput.val(data.depFlight);
+      typeInput.val(data.type);
+      originInput.val(data.origin);
+      depDetailsInput.val(data.depDetails);
       depDateInput.val(data.depDate);
-      desCityInput.val(data.desCity);
-      retFlightInput.val(data.retFlight);
-      retDateInput.val(data.retDate);
+      destinationInput.val(data.destination);
+      arrivalDetailsInput.val(data.arrivalDetails);
+      arrivalDateInput.val(data.arrivalDate);
       saleAmountInput.val(data.saleAmount);
       pointsInput.val(data.points);
       notesInput.val(data.notes);
@@ -132,12 +138,12 @@ $(document).ready(function () {
 
     // if any required fields are missing, alert user and terminate function
     // if (
-    //   !depCityInput.val().trim().trim() ||
-    //   !depFlightInput.val().trim().trim() ||
+    //   !originInput.val().trim().trim() ||
+    //   !depDetailsInput.val().trim().trim() ||
     //   !depDateInput.val().trim().trim() ||
-    //   !desCityInput.val().trim().trim() ||
-    //   !retFlightInput.val().trim().trim() ||
-    //   !retDateInput.val().trim().trim()
+    //   !destinationInput.val().trim().trim() ||
+    //   !arrivalDetailsInput.val().trim().trim() ||
+    //   !arrivalInput.val().trim().trim()
     // ) {
     //   alert("You are missing a required field!");
     //   return;
@@ -149,12 +155,13 @@ $(document).ready(function () {
     // create object with data to be sent
     var updateSale = {
       id: idInput.val(),
-      depCity: depCityInput.val().trim(),
-      depFlight: depFlightInput.val().trim(),
+      type: typeInput.val(),
+      origin: originInput.val().trim(),
+      depDetails: depDetailsInput.val().trim(),
       depDate: depDateInput.val().trim(),
-      desCity: desCityInput.val().trim(),
-      retFlight: retFlightInput.val().trim(),
-      retDate: retDateInput.val().trim(),
+      destination: destinationInput.val().trim(),
+      arrivalDetails: arrivalDetailsInput.val().trim(),
+      arrivalDate: arrivalDateInput.val().trim(),
       saleAmount: saleAmountInput.val().trim(),
       points: pointsInput.val().trim(),
       notes: notesInput.val().trim(),

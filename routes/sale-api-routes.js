@@ -37,6 +37,7 @@ module.exports = function (app) {
   app.post("/usedPoints", function (req, res) {
     console.log(req.body);
     db.Sale.create({
+      type: req.body.type,
       points: req.body.pointsUsed,
       notes: req.body.usedPointsOn,
       CustomerId: req.body.customerId,
@@ -51,12 +52,13 @@ module.exports = function (app) {
     // console.log(req.body)
 
     db.Sale.create({
-      depCity: saleData.depCity,
-      depFlight: saleData.depFlight,
+      type: saleData.type,
+      origin: saleData.origin,
+      depDetails: saleData.depDetails,
       depDate: saleData.depDate,
-      desCity: saleData.desCity,
-      retFlight: saleData.retFlight,
-      retDate: saleData.retDate,
+      destination: saleData.destination,
+      arrivalDetails: saleData.arrivalDetails,
+      arrivalDate: saleData.arrivalDate,
       saleAmount: saleData.saleAmount,
       points: saleData.points,
       notes: saleData.notes,
