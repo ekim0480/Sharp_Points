@@ -25,16 +25,6 @@
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
-    <!-- function to allow only 2 decimal places in sale amount input -->
-    <script>
-      var validate = function (e) {
-        var t = e.value;
-        e.value =
-          t.indexOf(".") >= 0
-            ? t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)
-            : t;
-      };
-    </script>
     <title>Update Sale</title>
   </head>
   <body>
@@ -83,9 +73,7 @@
             />
           </div>
           <div class="mb-3">
-            <label for="depCityInput" class="form-label"
-              >Departing City (REQUIRED)</label
-            >
+            <label for="depCityInput" class="form-label">Departing City</label>
             <input
               type="text"
               name="depCity"
@@ -96,7 +84,7 @@
           </div>
           <div class="mb-3">
             <label for="depFlightInput" class="form-label"
-              >Departing Flight (REQUIRED)</label
+              >Departing Flight</label
             >
             <input
               type="text"
@@ -108,7 +96,7 @@
           </div>
           <div class="mb-3">
             <label for="depDateInput" class="form-label"
-              >Date of Departure (REQUIRED)</label
+              >Date of Departure</label
             >
             <input
               type="date"
@@ -119,7 +107,7 @@
           </div>
           <div class="mb-3">
             <label for="desCityInput" class="form-label"
-              >Destination City (REQUIRED)</label
+              >Destination City</label
             >
             <input
               type="text"
@@ -131,7 +119,7 @@
           </div>
           <div class="mb-3">
             <label for="retFlightInput" class="form-label"
-              >Returning Flight (REQUIRED)</label
+              >Returning Flight</label
             >
             <input
               type="text"
@@ -142,9 +130,7 @@
             />
           </div>
           <div class="mb-3">
-            <label for="retDateInput" class="form-label"
-              >Date of Return (REQUIRED)</label
-            >
+            <label for="retDateInput" class="form-label">Date of Return</label>
             <input
               type="date"
               name="retDate"
@@ -170,6 +156,9 @@
               name="points"
               id="pointsInput"
               class="form-control regInput"
+              pattern=" 0+\.[0-9]*[1-9][0-9]*$"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              onpaste="let pasteData = event.clipboardData.getData('text'); if(pasteData){pasteData.replace(/[^0-9]*/g,'');} "
               placeholder="Points"
             />
           </div>

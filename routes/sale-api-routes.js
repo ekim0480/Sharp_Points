@@ -31,6 +31,20 @@ module.exports = function (app) {
     });
   });
 
+  // post route to create a blank sale for point redemption
+  // purposes
+
+  app.post("/usedPoints", function (req, res) {
+    console.log(req.body);
+    db.Sale.create({
+      points: req.body.pointsUsed,
+      notes: req.body.usedPointsOn,
+      CustomerId: req.body.customerId,
+    }).then(function (newUsedPoints) {
+      res.json(newUsedPoints);
+    });
+  });
+
   // post route to create a new sale
   app.post("/sales", function (req, res) {
     var saleData = req.body;

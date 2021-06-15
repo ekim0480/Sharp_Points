@@ -6,6 +6,19 @@ h2 {
   float: right;
 }
 
+#hiddenDiv {
+  margin-top: 30px;
+  width: 500px;
+}
+
+#redeemPointsForm {
+  margin-top: 15px;
+}
+
+#confirmRedeemBtn {
+  margin-top: 15px;
+}
+
 .forms {
   margin-top: 50px;
 }

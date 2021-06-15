@@ -1,4 +1,10 @@
 $(document).ready(function () {
+  // hide the div that contains input field used to redeem points
+  $("#hiddenDiv").hide();
+
+  // set value of redeem input field to 0
+  $("#redeemPointsInput").val(0);
+
   // saleContainer holds all of our sales
   var saleContainer = $(".sale-container");
   var saleList = $("tbody");
@@ -6,10 +12,12 @@ $(document).ready(function () {
   // dom variable to display point total
   var pointTotal = $("#pointTotal");
 
-  // Click event for new sale and delete button
+  // Add events for buttons
   $(document).on("click", "#deleteSale", handleSaleDelete);
   $(document).on("click", "#newSaleBtn", handleNewSale);
   $(document).on("click", "#editDetailsBtn", handleEditDetails);
+  $(document).on("click", "#redeemPointsBtn", handleHiddenFormReveal);
+  $(document).on("click", "#confirmRedeemBtn", handleConfirmRedeem);
   // $(document).on("click", "#viewSale", handleViewSale)
   // Variable to hold our sales
   var sales;
@@ -115,14 +123,6 @@ $(document).ready(function () {
     return newTr;
   }
 
-  // function tallyPoints(sales) {
-  //   for (var i = 0; i < sales.length; i++){
-  //   console.log("Point values", parseInt(sales[i].points))
-  //   }
-  // }
-
-  // tallyPoints()
-
   // InitializeRows handles appending all of our constructed sale HTML inside saleContainer
   // also adds all points and displays total value
   function initializeRows() {
@@ -167,6 +167,83 @@ $(document).ready(function () {
     }
     // send user to corresponding customer's update page
     window.location.href = "/customerUpdate?customer_id=" + customerId;
+  }
+
+  // function to reveal hidden form when redeem points button is clicked
+  function handleHiddenFormReveal() {
+    $("#hiddenDiv").show();
+  }
+
+  // function to handle redeeming of points
+  function handleConfirmRedeem(event) {
+    event.preventDefault();
+    customerId = url.split("=")[1];
+    // console.log("this is customer id", customerId);
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = mm + "/" + dd + "/" + yyyy;
+
+    // console.log(today)
+
+    var parsedPointTotal = parseInt(pointTotal.text().trim());
+    var parsedRedeemInput = parseInt($("#redeemPointsInput").val().trim());
+
+    var finalPointTotal = parsedPointTotal - parsedRedeemInput;
+
+    var pointsUsed = -parsedRedeemInput;
+    var usedPointsOn = "Used " + `${parsedRedeemInput}` + " on " + `${today}`;
+
+    // console.log(pointTotal.text());
+    // console.log(parsedRedeemInput);
+    // console.log(parsedPointTotal);
+    // console.log(finalPointTotal);
+
+    var updatedPoints = {
+      customerId: customerId,
+      pointsUsed: pointsUsed,
+      finalPoints: finalPointTotal,
+      usedPointsOn: usedPointsOn,
+    };
+
+    if (
+      parsedRedeemInput == null ||
+      isNaN(parsedRedeemInput) ||
+      parsedRedeemInput < 0
+    ) {
+      console.log(parsedRedeemInput);
+      alert("Please enter a valid amount.");
+      return;
+    } else if (finalPointTotal < 0) {
+      console.log(finalPointTotal);
+      alert("Point value may not exceed customer's total points!");
+      return;
+    } else {
+      console.log(parsedRedeemInput);
+      console.log(finalPointTotal);
+
+      var finalConfirmation = confirm(
+        "WARNING - Redeem " + `${parsedRedeemInput}` + " " + "points?"
+      );
+
+      if (finalConfirmation) {
+        $.ajax({
+          method: "PUT",
+          url: "/addPoints",
+          contentType: "application/json",
+          data: JSON.stringify(updatedPoints),
+          dataType: "json",
+        });
+        $.post("/usedPoints", updatedPoints)
+        .then(function () {
+          alert("Points redeemed!");
+          // location.reload()
+        });
+      }
+    }
   }
 
   // This function handles the sale delete

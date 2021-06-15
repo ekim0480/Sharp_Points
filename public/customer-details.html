@@ -75,6 +75,27 @@
           <div class="col-md-2 col-sm-2">
             <button class="btn btn-info" id="editDetailsBtn">Edit Details</a>
           </div>
+          <div class="col-md-2 col-sm-2">
+            <button class="btn btn-warning" id="redeemPointsBtn">Redeem Points</a>
+              
+          </div>
+        <div class="row">
+          <div class="col-md-2 col-sm-2" id="hiddenDiv">
+            <span id="howManyPointsText">How many points would you like to redeem?</span>
+            <form id="redeemPointsForm">
+              <input 
+                type="number" 
+                class="form-control regInput" 
+                id="redeemPointsInput"
+                min="0"
+                pattern=" 0+\.[0-9]*[1-9][0-9]*$" 
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                onpaste= "let pasteData = event.clipboardData.getData('text'); if(pasteData){pasteData.replace(/[^0-9]*/g,'');} "
+              />
+            </form>
+            <button type="submit" class="btn btn-danger" id="confirmRedeemBtn">REDEEM</button>
+          </div>
+        </div>  
         </div>
         <!-- Begin Sale list table -->
           <div class="container" id="sale-container">

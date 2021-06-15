@@ -160,7 +160,11 @@
               name="points"
               id="pointsInput"
               class="form-control regInput"
+              min="0"
+              pattern=" 0+\.[0-9]*[1-9][0-9]*$"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               placeholder="Points"
+              onpaste="let pasteData = event.clipboardData.getData('text'); if(pasteData){pasteData.replace(/[^0-9]*/g,'');} "
             />
           </div>
           <div class="mb-3">
