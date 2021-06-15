@@ -171,17 +171,48 @@ $(document).ready(function () {
 
   // This function handles the sale delete
   function handleSaleDelete() {
-    // extracting the id of the corresponding sale
+    // extracting the data of the corresponding sale
     var listItemData = $(this).parent("td").parent("tr").data("sale");
-    var id = listItemData.id;
-    // console.log(id)
+    console.log(listItemData);
+    var customerId = listItemData.Customer.id;
+    var saleId = listItemData.id;
+
+    // grabbing values we need to update Customer's total point value after
+    // subtracting the current sale's point value from the Customer's
+    // original total point value.
+    var customerOriginalTotalPoints = parseInt(
+      listItemData.Customer.totalPoints
+    );
+    var salePointValue = parseInt(listItemData.points);
+
+    // perform math to subtract this sale's points from the Customer's
+    // original total points, and prepare to make put request
+    var customerPointTotalAfterDelete = (
+      customerOriginalTotalPoints - salePointValue
+    ).toString();
+
+    // prepare as object to be sent in ajax put call
+    var updatedPoints = {
+      customerId: customerId,
+      finalPoints: customerPointTotalAfterDelete,
+    };
+
     // show confirm window to ask user to confirm the deletion
     var confirmDelete = confirm("Confirm delete of sale?");
     // if user confirms, make the ajax call to delete the sale
     if (confirmDelete) {
       $.ajax({
         method: "DELETE",
-        url: "/sales/" + id,
+        url: "/sales/" + saleId,
+      });
+      // make ajax call to update customer's total points value
+      // with minus deleted sale
+      $.ajax({
+        method: "PUT",
+        url: "/addPoints",
+        contentType: "application/json",
+        data: JSON.stringify(updatedPoints),
+        dataType: "json",
       }).then(function () {
         // refresh page
         location.reload();

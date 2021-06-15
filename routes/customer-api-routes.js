@@ -52,10 +52,10 @@ module.exports = function (app) {
     });
   });
 
-  // route to add to customer's point total
+  // route to update a customer's point total
   app.put("/addPoints", function (req, res) {
-    // console.log("REQ BODY", req.body)
-    // console.log("this is what i want", req.body.finalPoints)
+    console.log("REQ BODY", req.body);
+    console.log("this is what i want", req.body.finalPoints);
     db.Customer.update(
       // tell Customer table to update the column totalPoints:...
       { totalPoints: req.body.finalPoints },
