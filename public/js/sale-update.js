@@ -48,8 +48,23 @@ $(document).ready(function () {
       console.log("customerid", data.Customer.id);
     }).then(function (data) {
       // pre-select "type" option to match the sale's original type
-      console.log(data.type);
-      $("#typeInput").val(data.type).attr("selected", "selected");
+      // console.log(data.type);
+
+      // If this is an update for a "points" sale, since we add
+      // a points option to the select list, then hide it so it
+      // cannot be altered.
+      if (data.type == "Points") {
+        typeInput.append(
+          $(`<option>`, {
+            value: "Points",
+            text: "Points",
+          })
+        );
+
+        $("#selectDiv").hide();
+      } else {
+        $("#typeInput").val(data.type).attr("selected", "selected");
+      }
 
       // pre-insert the sale's data into the corresponding input fields
       idInput.val(data.id);
