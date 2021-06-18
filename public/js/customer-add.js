@@ -38,19 +38,19 @@ $(document).ready(function () {
         // on success, run this callback
         .then(function (data) {
           // log the data we found
-          // console.log(data);
+          console.log(data);
           // tell user customer was added
           alert("Customer added!");
-          return;
+          window.location.href = "customerDetails?customer_id=" + data.id
         });
     }
 
     // clear form content
-    $("#firstNameInput").val("");
-    $("#lastNameInput").val("");
-    $("#dobInput").val("");
-    $("#phoneInput").val("");
-    $("#emailInput").val("");
-    $("#mileageInput").val("");
+    // $("#firstNameInput").val("");
+    // $("#lastNameInput").val("");
+    // $("#dobInput").val("");
+    // $("#phoneInput").val("");
+    // $("#emailInput").val("");
+    // $("#mileageInput").val("");
   }
 });
