@@ -38,7 +38,7 @@ $(document).ready(function () {
       var newCustomer = {
         firstName: firstNameInput.val().trim(),
         lastName: lastNameInput.val().trim(),
-        gender: genderInput.val().trim(),
+        gender: genderInput,
         dob: dobInput.val().trim(),
         phone: phoneInput.val().trim(),
         email: emailInput.val().trim(),
