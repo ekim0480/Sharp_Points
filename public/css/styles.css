@@ -23,7 +23,6 @@ h2 {
   margin-top: 50px;
 }
 
-
 #typeInput {
   margin-left: 50px;
 }
@@ -35,6 +34,7 @@ h2 {
 #customerAddDiv {
   width: 550px;
 }
+
 button.submit {
   float: right;
 }

@@ -1,3 +1,8 @@
+validateEmail = (email) => {
+  var re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
 module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define("Customer", {
     // Giving the Customer model structure
@@ -32,7 +37,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(30),
       allowNull: true,
       validate: {
-        isEmail: true,
+        isEmailOrEmpty:(val, next) => {
+          if (!val || val === "" || validateEmail(val)) {
+            return next()
+          }
+          else {
+            return next("Email is invalid!")
+          }
+        }
       },
     },
     mileage: {
@@ -51,6 +63,11 @@ module.exports = (sequelize, DataTypes) => {
       // Delete all associated sales when deleting customer
       onDelete: "cascade",
     });
+  };
+
+  // Telling our model that each Customer can have many mileage numbers
+  Customer.associate = function (models) {
+    Customer.belongsToMany(models.Mileage, { through: "CustomerMileage" });
   };
 
   return Customer;

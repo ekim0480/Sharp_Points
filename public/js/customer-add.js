@@ -7,7 +7,7 @@ $(document).ready(function () {
   var emailInput = $("#emailInput");
   var mileageInput = $("#mileageInput");
 
-  // click event for submit button
+  // submit event for submit button
   $(document).on("submit", "#customerAddForm", handleCustomerFormSubmit);
 
   // function to handle add customer form submission
