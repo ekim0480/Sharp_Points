@@ -23,6 +23,9 @@ $(document).ready(function () {
       alert("You are missing a required field!");
       return;
     } else {
+      if (emailInput == "") {
+        emailInput == null
+      }
       // make a new customer object
       var newCustomer = {
         firstName: firstNameInput.val().trim(),

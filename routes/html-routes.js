@@ -40,4 +40,9 @@ module.exports = function (app) {
   app.get("/saleUpdate", function (req, res) {
     res.sendFile(path.join(__dirname, "../public/sale-update.html"));
   });
+
+  // route to get e-mail list
+  app.get("/emailList", function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/email-list.html"));
+  });
 };

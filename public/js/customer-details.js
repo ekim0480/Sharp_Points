@@ -45,7 +45,7 @@ $(document).ready(function () {
     $.get("/customers/" + customerId, function (data) {
       console.log("Customer", data);
     }).then(function (data) {
-      // console.log(data.firstName)
+      // console.log(data)
       // printing customer data
       // declaring dom variables
       var listEl = document.createElement("ul");

@@ -34,6 +34,14 @@ module.exports = function (app) {
     });
   });
 
+  app.get("/email", function (req, res) {
+    db.Customer.findAll({
+      attributes: ["email"],
+    }).then(function (dbCustomer) {
+      res.json(dbCustomer);
+    });
+  });
+
   // route to create a new customer
   // If a user sends data to add a new customer..
   app.post("/customers", function (req, res) {
