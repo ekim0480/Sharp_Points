@@ -45,7 +45,6 @@ $(document).ready(function () {
     $.get("/customers/" + customerId, function (data) {
       console.log("Customer", data);
     }).then(function (data) {
-      // console.log(data)
       // printing customer data
       // declaring dom variables
       var listEl = document.createElement("ul");
@@ -55,6 +54,7 @@ $(document).ready(function () {
       var li4 = document.createElement("li");
       var li5 = document.createElement("li");
       var li6 = document.createElement("li");
+      var li7 = document.createElement("li");
 
       // display retrieved total point value
       pointTotal.text(data.totalPoints);
@@ -62,10 +62,11 @@ $(document).ready(function () {
       // set the text content of the list that will be printed
       li1.textContent = "ID: " + data.id;
       li2.textContent = "Name: " + data.lastName + ", " + data.firstName;
-      li3.textContent = "Date of Birth: " + data.dob;
-      li4.textContent = "Phone: " + data.phone;
-      li5.textContent = "E-mail: " + data.email;
-      li6.textContent = "Mileage: " + data.mileage;
+      li3.textContent = "Gender: " + data.gender;
+      li4.textContent = "Date of Birth: " + data.dob;
+      li5.textContent = "Phone: " + data.phone;
+      li6.textContent = "E-mail: " + data.email;
+      li7.textContent = "Mileage: " + data.mileage;
       // append the list to #customerDetailsRow
       $("#customerDetailsRow").append(listEl);
       // append each list item to the newly appended list

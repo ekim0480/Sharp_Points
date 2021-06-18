@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
       // allowNull: false,
       notEmpty: true,
     },
+    gender: {
+      type: DataTypes.STRING
+    },
     dob: {
       type: DataTypes.DATEONLY,
       // allowNull: false,

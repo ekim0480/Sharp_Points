@@ -24,12 +24,21 @@ $(document).ready(function () {
       return;
     } else {
       if (emailInput == "") {
-        emailInput == null
+        emailInput == null;
       }
+
+      // grabbing selected gender value from checked radio button
+      var genderInput = "";
+      var selectedGender = $("#genderFieldset input[type='radio']:checked");
+      if (selectedGender.length > 0) {
+        genderInput = selectedGender.val();
+      }
+
       // make a new customer object
       var newCustomer = {
         firstName: firstNameInput.val().trim(),
         lastName: lastNameInput.val().trim(),
+        gender: genderInput.val().tri(),
         dob: dobInput.val().trim(),
         phone: phoneInput.val().trim(),
         email: emailInput.val().trim(),
@@ -44,7 +53,7 @@ $(document).ready(function () {
           console.log(data);
           // tell user customer was added
           alert("Customer added!");
-          window.location.href = "customerDetails?customer_id=" + data.id
+          window.location.href = "customerDetails?customer_id=" + data.id;
         });
     }
 

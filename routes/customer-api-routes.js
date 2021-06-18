@@ -51,6 +51,7 @@ module.exports = function (app) {
     db.Customer.create({
       firstName: customerData.firstName,
       lastName: customerData.lastName,
+      gender: customerData.gender,
       dob: customerData.dob,
       phone: customerData.phone,
       email: customerData.email,

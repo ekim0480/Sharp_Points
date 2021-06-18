@@ -23,6 +23,11 @@ $(document).ready(function () {
     $.get("/customers/" + customerId, function (data) {
       console.log("Customer", data);
     }).then(function (data) {
+      // selecting radio button
+      $("input[name=gender][value=" + data.gender + "]").attr(
+        "checked",
+        "checked"
+      );
       // pre-inserting the customer's data into the corresponding input fields
       $("#idInput").val(data.id);
       $("#firstNameInput").val(data.firstName);
@@ -48,11 +53,16 @@ $(document).ready(function () {
       return;
       // otherwise ...
     } else {
+      var selectedGender = $("#genderFieldset input[type='radio']:checked");
+      if (selectedGender.length > 0) {
+        genderInput = selectedGender.val();
+      }
       // set up object with customer data to be sent
       var updateCustomer = {
         id: $("#idInput").val().trim(),
         firstName: $("#firstNameInput").val().trim(),
         lastName: $("#lastNameInput").val().trim(),
+        gender: selectedGender.val().trim(),
         dob: $("#dobInput").val().trim(),
         phone: $("#phoneInput").val().trim(),
         email: $("#emailInput").val().trim(),
