@@ -57,11 +57,16 @@ $(document).ready(function () {
       if (selectedGender.length > 0) {
         genderInput = selectedGender.val();
       }
+
+      // convert name inputs to upper case for consistency
+      var firstNameUpper = $("#firstNameInput").val().trim().toUpperCase();
+      var lastNameUpper = $("#lastNameInput").val().trim().toUpperCase();
+
       // set up object with customer data to be sent
       var updateCustomer = {
         id: $("#idInput").val().trim(),
-        firstName: $("#firstNameInput").val().trim(),
-        lastName: $("#lastNameInput").val().trim(),
+        firstName: firstNameUpper,
+        lastName: lastNameUpper,
         gender: selectedGender.val().trim(),
         dob: $("#dobInput").val().trim(),
         phone: $("#phoneInput").val().trim(),

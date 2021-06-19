@@ -34,10 +34,14 @@ $(document).ready(function () {
         genderInput = selectedGender.val();
       }
 
+      // convert name inputs to upper case for consistency
+      var firstNameUpper = firstNameInput.val().trim().toUpperCase();
+      var lastNameUpper = lastNameInput.val().trim().toUpperCase();
+
       // make a new customer object
       var newCustomer = {
-        firstName: firstNameInput.val().trim(),
-        lastName: lastNameInput.val().trim(),
+        firstName: firstNameUpper,
+        lastName: lastNameUpper,
         gender: genderInput,
         dob: dobInput.val().trim(),
         phone: phoneInput.val().trim(),
