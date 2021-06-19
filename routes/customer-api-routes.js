@@ -6,6 +6,7 @@ module.exports = function (app) {
   app.get("/customers", function (req, res) {
     db.Customer.findAll({
       // include: [db.Sale]
+      order: [["lastName", "ASC"]],
     }).then(function (dbCustomer) {
       res.json(dbCustomer);
     });
