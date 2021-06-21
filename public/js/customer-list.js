@@ -39,7 +39,16 @@ $(document).ready(function () {
         rowsToAdd.push(createCustomerRow(data[i]));
       }
       renderCustomerList(rowsToAdd);
+    });
+  }
 
+  // A function for rendering the list of customers to the page
+  function renderCustomerList(rows) {
+    customerList.children().not(":last").remove();
+    customerContainer.children(".alert").remove();
+    if (rows.length) {
+      //   console.log(rows);
+      customerList.prepend(rows);
       // table pagination
       $("#customerTable").after('<div id="nav"></div>');
       var rowsShown = 10;
@@ -65,16 +74,6 @@ $(document).ready(function () {
           .css("display", "table-row")
           .animate({ opacity: 1 }, 300);
       });
-    });
-  }
-
-  // A function for rendering the list of customers to the page
-  function renderCustomerList(rows) {
-    customerList.children().not(":last").remove();
-    customerContainer.children(".alert").remove();
-    if (rows.length) {
-      //   console.log(rows);
-      customerList.prepend(rows);
     } else {
       renderEmpty();
     }
@@ -88,6 +87,29 @@ $(document).ready(function () {
     customerContainer.append(alertDiv);
   }
 
+  // function to render div with text when search finds no matches.
+  function renderNoMatch() {
+    $("#nav").remove();
+    $("#customerTable tbody").empty();
+    var alertDiv = $("<div>");
+    // save searched string to use to use in url should the user click
+    // the link to add as a new customer
+    var searchedString = $("#phoneSearchInput").val().trim();
+    alertDiv.addClass("alert alert-danger");
+    // display this message if no matches are found, includes a link which,
+    // if clicked, will lead to the addCustomer page, with the searched
+    // phone number in the url so we can pre-insert it into the form.
+    alertDiv.html(
+      "No matches found!  Click " +
+        "<a id='noMatchesLink'>" +
+        "here" +
+        "</a>" +
+        " to add as a new customer."
+    );
+    customerContainer.append(alertDiv);
+    $("#noMatchesLink").attr("href", "/addCustomer?phone=" + searchedString);
+  }
+
   // Function for handling search
   $("#customerSearchForm").on("submit", function (event) {
     event.preventDefault();
@@ -98,13 +120,13 @@ $(document).ready(function () {
       method: "GET",
     }).then(function (data) {
       if (data === null) {
-        alert("No matching phone number found!");
+        renderNoMatch();
       } else {
         var rowsToAdd = [];
+        $("#nav").remove();
         $("#customerTable tbody").empty();
         rowsToAdd.push(createCustomerRow(data));
         renderCustomerList(rowsToAdd);
-        $("#nav").remove();
       }
     });
   });

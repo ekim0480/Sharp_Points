@@ -7,6 +7,15 @@ $(document).ready(function () {
   var emailInput = $("#emailInput");
   var mileageInput = $("#mileageInput");
 
+  // if coming from the link to add customer after a search returned no
+  // results, get the phone number from the url, and pre-insert it into the form
+  var url = window.location.search;
+  var phonePreInsert;
+  if (url.indexOf("?phone=") !== -1) {
+    phonePreInsert = url.split("=")[1];
+    phoneInput.val(phonePreInsert);
+  }
+
   // submit event for submit button
   $(document).on("submit", "#customerAddForm", handleCustomerFormSubmit);
 
