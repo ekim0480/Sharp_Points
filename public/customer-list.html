@@ -26,11 +26,12 @@
       crossorigin="anonymous"
     ></script>
     <!-- importing simplePagination.js plugin for paginating tables, and the css for it -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.4/jquery.simplePagination.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.4/jquery.simplePagination.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.4/simplePagination.css"
-    />
+    /> -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery.fancytable/dist/fancyTable.min.js"></script>
     <title>Customers List</title>
   </head>
   <body>
@@ -89,7 +90,8 @@
             <h1>Customers</h1>
             <table class="table table-striped" id="customerTable">
               <thead>
-                <tr>
+                <tr id="tableHeadersRow">
+                  <th class="tableHeadId">ID</th>
                   <th>Name</th>
                   <th>Phone</th>
                   <th>See Details</th>
@@ -97,8 +99,8 @@
               </thead>
               <tbody></tbody>
             </table>
-            <!-- prepare div for pagination -->
-            <div id="page-nav"></div>
+            <!-- prepare div for pagination using simplePagination.js-->
+            <!-- <div id="page-nav"></div> -->
           </div>
         </div>
       </div>

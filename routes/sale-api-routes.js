@@ -33,7 +33,6 @@ module.exports = function (app) {
 
   // post route to create a blank sale for point redemption
   // purposes
-
   app.post("/usedPoints", function (req, res) {
     console.log(req.body);
     db.Sale.create({

@@ -87,7 +87,7 @@ $(document).ready(function () {
       customerId = "/?customer_id=" + customerId;
     }
     $.get("/sales" + customerId, function (data) {
-      // console.log("Sales", data);
+      console.log("Sales", data);
       sales = data;
       // if there are no sales, run displayEmpty
       if (!sales || !sales.length) {
@@ -104,10 +104,12 @@ $(document).ready(function () {
     // console.log(saleData.origin)
     var newTr = $("<tr>");
 
-    // add class for paginating
-    newTr.addClass("paginate");
+    // add class for paginating with simplePagination.js
+    // newTr.addClass("paginate");
 
     newTr.data("sale", saleData);
+    newTr.append("<td class='tableHeadId'>" + saleData.Customer.id + "</td>")
+    newTr.append("<td class='tableHeadId'>" + saleData.id + "</td>")
     newTr.append("<td>" + saleData.type + "</td>");
     newTr.append("<td>" + saleData.origin + "</td>");
     newTr.append("<td>" + saleData.depDetails + "</td>");
@@ -147,37 +149,48 @@ $(document).ready(function () {
     saleContainer.children(".alert").remove();
     // console.log(rows.length);
     saleList.prepend(rows);
+
     // table pagination
+    $("#saleTable").fancyTable({
+      pagination: true,
+      perPage:10,
+      globalSearch:true,
+      // exclude first 2 columns, which are hidden and hold customer and
+      // sale id values, and last 2 columns, which are links to view/delete
+      globalSearchExcludeColumns: [1,2,12,13],
+      inputPlaceholder: "Search All..."
+    });   
 
-    // Grab whatever we need to paginate
-    var pageParts = $(".paginate");
+    // // simplePagination.js code
+    // // Grab whatever we need to paginate
+    // var pageParts = $(".paginate");
 
-    // How many parts do we have?
-    var numPages = pageParts.length;
-    // How many parts do we want per page?
-    var perPage = 10;
+    // // How many parts do we have?
+    // var numPages = pageParts.length;
+    // // How many parts do we want per page?
+    // var perPage = 10;
 
-    // When the document loads we're on page 1
-    // So to start with... hide everything else
-    pageParts.slice(perPage).hide();
-    // Apply simplePagination to our placeholder
-    $("#page-nav").pagination({
-      items: numPages,
-      itemsOnPage: perPage,
-      cssStyle: "light-theme",
-      // We implement the actual pagination
-      //   in this next function. It runs on
-      //   the event that a user changes page
-      onPageClick: function (pageNum) {
-        // Which page parts do we show?
-        var start = perPage * (pageNum - 1);
-        var end = start + perPage;
+    // // When the document loads we're on page 1
+    // // So to start with... hide everything else
+    // pageParts.slice(perPage).hide();
+    // // Apply simplePagination to our placeholder
+    // $("#page-nav").pagination({
+    //   items: numPages,
+    //   itemsOnPage: perPage,
+    //   cssStyle: "light-theme",
+    //   // We implement the actual pagination
+    //   //   in this next function. It runs on
+    //   //   the event that a user changes page
+    //   onPageClick: function (pageNum) {
+    //     // Which page parts do we show?
+    //     var start = perPage * (pageNum - 1);
+    //     var end = start + perPage;
 
-        // First hide all page parts
-        // Then show those just for our page
-        pageParts.hide().slice(start, end).show();
-      },
-    });
+    //     // First hide all page parts
+    //     // Then show those just for our page
+    //     pageParts.hide().slice(start, end).show();
+    //   },
+    // });
   }
 
   // function to handle new sale
@@ -305,18 +318,25 @@ $(document).ready(function () {
   // This function handles the sale delete
   function handleSaleDelete() {
     // extracting the data of the corresponding sale
-    var listItemData = $(this).parent("td").parent("tr").data("sale");
-    // console.log(listItemData);
-    var customerId = listItemData.Customer.id;
-    var saleId = listItemData.id;
+    // var listItemData = $(this).parent("td").parent("tr").data("sale");
+    // var testItemData = $(this).parent("td").parent("tr").children("td:nth-child(2)").text()
+    // console.log(testItemData);
+
+    // workaround because fancyTable.js was messing with our jquery data
+    // storage.  Included hidden columns containing both customer and 
+    // sale ids, and referred to text in "nth" columns to retreive the
+    // necessary data.
+    var customerId = $(this).parent("td").parent("tr").children("td:first").text()
+    var saleId = $(this).parent("td").parent("tr").children("td:nth-child(2)").text()
 
     // grabbing values we need to update Customer's total point value after
     // subtracting the current sale's point value from the Customer's
     // original total point value.
     var customerOriginalTotalPoints = parseInt(
-      listItemData.Customer.totalPoints
+      $("#pointTotal").text()
     );
-    var salePointValue = parseInt(listItemData.points);
+    var salePointValue = parseInt($(this).parent("td").parent("tr").children("td:nth-child(11)").text());
+    // console.log(salePointValue)
 
     // perform math to subtract this sale's points from the Customer's
     // original total points, and prepare to make put request

@@ -14,10 +14,14 @@ $(document).ready(function () {
     // console.log(customerData);
     var newTr = $("<tr>");
 
-    // adding class for paginating
-    newTr.addClass("paginate");
+    // adding class for paginating with simplePaginatiom.js
+    // newTr.addClass("paginate");
 
     newTr.data("customer", customerData);
+    // fancytables plugin was screwing up tr data storage above somehow
+    // thus the delete button wasn't working.  workaround by including ID 
+    // as a hidden column and referring to it that way.
+    newTr.append("<td class='tableHeadId'>" + customerData.id + "</td>")
     newTr.append(
       "<td>" + customerData.lastName + ", " + customerData.firstName + "</td>"
     );
@@ -56,35 +60,51 @@ $(document).ready(function () {
 
       // table pagination
 
-      // Grab whatever we need to paginate
-      var pageParts = $(".paginate");
+      $("#customerTable").fancyTable({
+        sortColumn:0,
+        pagination: true,
+        perPage:10,
+        globalSearch:true,
+        // name column is technically column 2 due to hidden id column
+        // and last 2 columns are view/delete links.  3rd column is phone
+        // leaving only name search.
+        globalSearchExcludeColumns: [1,3,4,5],
+        inputPlaceholder: "Search by Name..."
+      });      
 
-      // How many parts do we have?
-      var numPages = pageParts.length;
-      // How many parts do we want per page?
-      var perPage = 10;
+      // $(".fancySearchRow").children("th:last").remove()
 
-      // When the document loads we're on page 1
-      // So to start with... hide everything else
-      pageParts.slice(perPage).hide();
-      // Apply simplePagination to our placeholder
-      $("#page-nav").pagination({
-        items: numPages,
-        itemsOnPage: perPage,
-        cssStyle: "light-theme",
-        // We implement the actual pagination
-        //   in this next function. It runs on
-        //   the event that a user changes page
-        onPageClick: function (pageNum) {
-          // Which page parts do we show?
-          var start = perPage * (pageNum - 1);
-          var end = start + perPage;
 
-          // First hide all page parts
-          // Then show those just for our page
-          pageParts.hide().slice(start, end).show();
-        },
-      });
+      // // simplePagination.js code
+      // // Grab whatever we need to paginate
+      // var pageParts = $(".paginate");
+
+      // // How many parts do we have?
+      // var numPages = pageParts.length;
+      // // How many parts do we want per page?
+      // var perPage = 10;
+
+      // // When the document loads we're on page 1
+      // // So to start with... hide everything else
+      // pageParts.slice(perPage).hide();
+      // // Apply simplePagination to our placeholder
+      // $("#page-nav").pagination({
+      //   items: numPages,
+      //   itemsOnPage: perPage,
+      //   cssStyle: "light-theme",
+      //   // We implement the actual pagination
+      //   //   in this next function. It runs on
+      //   //   the event that a user changes page
+      //   onPageClick: function (pageNum) {
+      //     // Which page parts do we show?
+      //     var start = perPage * (pageNum - 1);
+      //     var end = start + perPage;
+
+      //     // First hide all page parts
+      //     // Then show those just for our page
+      //     pageParts.hide().slice(start, end).show();
+      //   },
+      // });
     } else {
       renderEmpty();
     }
@@ -151,14 +171,25 @@ $(document).ready(function () {
 
   // Function for handling delete
   function handleCustomerDelete() {
-    var listItemData = $(this).parent("td").parent("tr").data("customer");
-    var id = listItemData.id;
+
+    // workaround for getting customer id to delete, since fancyTables
+    // was somehow messing with $data storage.  Retreiving customer's id
+    // from hidden id column.
+
+    // grabbing row's string data
+    var listItemData = $(this).parent("td").parent("tr").text()
+    // splitting it at spaces
+    var listItemDataSplit = listItemData.split(" ")
+    // grabbing first set of strings after split, which contains the id
+    // number and the first and last name
+    var listItemDataFirstSplit = listItemDataSplit[0]
+    // extract the numbers from the string, leaving us with just the id
+    var listItemDataMatch = listItemDataFirstSplit.match(/(\d+)/)
+
+    var id = listItemDataMatch[0];
+    // console.log(id)
     var confirmDelete = confirm(
-      "Confirm delete of customer: " +
-        listItemData.lastName +
-        ", " +
-        listItemData.firstName +
-        "?"
+      "Confirm delete of customer?"
     );
     if (confirmDelete) {
       $.ajax({

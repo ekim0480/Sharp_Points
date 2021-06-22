@@ -82,3 +82,7 @@ button.submit {
 legend {
   font-size: 17px;
 }
+
+.tableHeadId {
+  display: none;
+}
