@@ -13,6 +13,10 @@ $(document).ready(function () {
   function createCustomerRow(customerData) {
     // console.log(customerData);
     var newTr = $("<tr>");
+
+    // adding class for paginating
+    newTr.addClass("paginate");
+
     newTr.data("customer", customerData);
     newTr.append(
       "<td>" + customerData.lastName + ", " + customerData.firstName + "</td>"
@@ -51,18 +55,36 @@ $(document).ready(function () {
       customerList.prepend(rows);
 
       // table pagination
-      $("#customerTable").fancyTable({
-        sortColumn: 0,
-        pagination: true,
-        perPage: 10,
-        globalSearch: false,
-        inputPlaceholder: "Search by Name",
-      });
 
-      // removing search fields for each column, leaving only name search
-      $(".fancySearchRow").children().last().remove();
-      $(".fancySearchRow").children().last().remove();
-      $(".fancySearchRow").children().last().remove();
+      // Grab whatever we need to paginate
+      var pageParts = $(".paginate");
+
+      // How many parts do we have?
+      var numPages = pageParts.length;
+      // How many parts do we want per page?
+      var perPage = 10;
+
+      // When the document loads we're on page 1
+      // So to start with... hide everything else
+      pageParts.slice(perPage).hide();
+      // Apply simplePagination to our placeholder
+      $("#page-nav").pagination({
+        items: numPages,
+        itemsOnPage: perPage,
+        cssStyle: "light-theme",
+        // We implement the actual pagination
+        //   in this next function. It runs on
+        //   the event that a user changes page
+        onPageClick: function (pageNum) {
+          // Which page parts do we show?
+          var start = perPage * (pageNum - 1);
+          var end = start + perPage;
+
+          // First hide all page parts
+          // Then show those just for our page
+          pageParts.hide().slice(start, end).show();
+        },
+      });
     } else {
       renderEmpty();
     }
@@ -78,11 +100,8 @@ $(document).ready(function () {
 
   // function to render div with text when search finds no matches.
   function renderNoMatch() {
-    // remove footer which housed the pagination
-    $("tfoot").remove();
-    // remove name search bar
-    $(".fancySearchRow").children().last().remove();
-
+    // remove div with pagination buttons
+    $("#page-nav").remove();
     // empty all table body content
     $("#customerTable tbody").empty();
 
@@ -123,12 +142,11 @@ $(document).ready(function () {
         renderNoMatch();
       } else {
         var rowsToAdd = [];
-        $("#nav").remove();
         $("#customerTable tbody").empty();
         rowsToAdd.push(createCustomerRow(data));
         renderCustomerList(rowsToAdd);
       }
-    });
+    })
   });
 
   // Function for handling delete

@@ -103,6 +103,10 @@ $(document).ready(function () {
     // console.log(saleData);
     // console.log(saleData.origin)
     var newTr = $("<tr>");
+
+    // add class for paginating
+    newTr.addClass("paginate");
+
     newTr.data("sale", saleData);
     newTr.append("<td>" + saleData.type + "</td>");
     newTr.append("<td>" + saleData.origin + "</td>");
@@ -135,14 +139,6 @@ $(document).ready(function () {
     }
     // console.log(salesToAdd);
     renderSaleList(salesToAdd);
-
-    $("#saleTable").fancyTable({
-      sortColumn: 0,
-      pagination: true,
-      perPage: 10,
-      globalSearch: true,
-      globalSearchExcludeColumns: [10, 11],
-    });
   }
 
   // function to render sales rows, if present
@@ -151,7 +147,39 @@ $(document).ready(function () {
     saleContainer.children(".alert").remove();
     // console.log(rows.length);
     saleList.prepend(rows);
+    // table pagination
+
+    // Grab whatever we need to paginate
+    var pageParts = $(".paginate");
+
+    // How many parts do we have?
+    var numPages = pageParts.length;
+    // How many parts do we want per page?
+    var perPage = 10;
+
+    // When the document loads we're on page 1
+    // So to start with... hide everything else
+    pageParts.slice(perPage).hide();
+    // Apply simplePagination to our placeholder
+    $("#page-nav").pagination({
+      items: numPages,
+      itemsOnPage: perPage,
+      cssStyle: "light-theme",
+      // We implement the actual pagination
+      //   in this next function. It runs on
+      //   the event that a user changes page
+      onPageClick: function (pageNum) {
+        // Which page parts do we show?
+        var start = perPage * (pageNum - 1);
+        var end = start + perPage;
+
+        // First hide all page parts
+        // Then show those just for our page
+        pageParts.hide().slice(start, end).show();
+      },
+    });
   }
+
   // function to handle new sale
   function handleNewSale() {
     // extract customerid from url
