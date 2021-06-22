@@ -6,7 +6,7 @@ $(document).ready(function () {
   $("#redeemPointsInput").val(0);
 
   // saleContainer holds all of our sales
-  var saleContainer = $(".sale-container");
+  var saleContainer = $("#sale-container");
   var saleList = $("tbody");
 
   // dom variable to display point total
@@ -128,36 +128,20 @@ $(document).ready(function () {
   // InitializeRows handles appending all of our constructed sale HTML inside saleContainer
   // also adds all points and displays total value
   function initializeRows() {
-    saleContainer.empty();
+    // saleContainer.empty();
     var salesToAdd = [];
     for (var i = 0; i < sales.length; i++) {
       salesToAdd.push(createSaleRow(sales[i]));
     }
+    // console.log(salesToAdd);
     renderSaleList(salesToAdd);
 
-    $("#saleTable").after('<div id="nav"></div>');
-    var rowsShown = 10;
-    var rowsTotal = $("#saleTable tbody tr").length;
-    var numPages = rowsTotal / rowsShown;
-    for (i = 0; i < numPages; i++) {
-      var pageNum = i + 1;
-      $("#nav").append('<a href="#" rel="' + i + '">' + pageNum + "</a> ");
-    }
-    $("#saleTable tbody tr").hide();
-    $("#saleTable tbody tr").slice(0, rowsShown).show();
-    $("#nav a:first").addClass("active");
-    $("#nav a").bind("click", function () {
-      $("#nav a").removeClass("active");
-      $(this).addClass("active");
-      var currPage = $(this).attr("rel");
-      var startItem = currPage * rowsShown;
-      var endItem = startItem + rowsShown;
-      $("#saleTable tbody tr")
-        .css("opacity", "0.0")
-        .hide()
-        .slice(startItem, endItem)
-        .css("display", "table-row")
-        .animate({ opacity: 1 }, 300);
+    $("#saleTable").fancyTable({
+      sortColumn: 0,
+      pagination: true,
+      perPage: 10,
+      globalSearch: true,
+      globalSearchExcludeColumns: [10, 11],
     });
   }
 
@@ -165,12 +149,8 @@ $(document).ready(function () {
   function renderSaleList(rows) {
     saleList.children().not(":last").remove();
     saleContainer.children(".alert").remove();
-    if (rows.length) {
-      //   console.log(rows);
-      saleList.prepend(rows);
-    } else {
-      renderEmpty();
-    }
+    // console.log(rows.length);
+    saleList.prepend(rows);
   }
   // function to handle new sale
   function handleNewSale() {
@@ -254,7 +234,7 @@ $(document).ready(function () {
       isNaN(parsedRedeemInput) ||
       parsedRedeemInput < 0
     ) {
-      console.log(parsedRedeemInput);
+      // console.log(parsedRedeemInput);
       alert("Please enter a valid amount.");
       return;
     } else if (
@@ -262,7 +242,7 @@ $(document).ready(function () {
       // alert and terminate
       finalPointTotal < 0
     ) {
-      console.log(finalPointTotal);
+      // console.log(finalPointTotal);
       alert("Point value may not exceed customer's total points!");
       return;
     } else {
@@ -298,7 +278,7 @@ $(document).ready(function () {
   function handleSaleDelete() {
     // extracting the data of the corresponding sale
     var listItemData = $(this).parent("td").parent("tr").data("sale");
-    console.log(listItemData);
+    // console.log(listItemData);
     var customerId = listItemData.Customer.id;
     var saleId = listItemData.id;
 
@@ -356,16 +336,14 @@ $(document).ready(function () {
   // }
 
   // This function displays a message when there are no sales
-  function displayEmpty(id) {
-    var query = window.location.search;
-    var partial = "";
-    if (id) {
-      partial = " for Customer #" + id;
-    }
-    saleContainer.empty();
-    var messageH2 = $("<h2>");
-    messageH2.css({ "text-align": "center", "margin-top": "50px" });
-    messageH2.html("No sales yet" + partial);
-    saleContainer.append(messageH2);
+  function displayEmpty() {
+    var alertDiv = $("<div>");
+    $("#saleTable tbody").empty();
+    alertDiv.addClass("alert alert-danger");
+    // display this message if no matches are found, includes a link which,
+    // if clicked, will lead to the addCustomer page, with the searched
+    // phone number in the url so we can pre-insert it into the form.
+    alertDiv.html("No Sales Found");
+    $("#sale-container").append(alertDiv);
   }
 });

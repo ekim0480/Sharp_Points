@@ -25,7 +25,8 @@
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
-    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <!-- Import fancytables for pagination and sorting, also includes search function -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery.fancytable/dist/fancyTable.min.js"></script>
     <title>Customer Details</title>
   </head>
   <body>
@@ -101,7 +102,7 @@
           <div class="container" id="sale-container">
             <h1>Sales</h1>
             <h2>Total Points: <span id="pointTotal">0</span></h2>
-            <table class="sortable table table-striped" id="saleTable">
+            <table class="table table-striped" id="saleTable">
               <thead>
                 <tr>
                   <th>Type</th>
