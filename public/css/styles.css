@@ -86,3 +86,12 @@ legend {
 .tableHeadId {
   display: none;
 }
+
+/* .fancySearchRow input {
+  width: 75% !important;
+} */
+
+#showAllLink {
+  font-weight: bold;
+  text-align: right;
+}

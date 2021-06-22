@@ -8,6 +8,7 @@ $(document).ready(function () {
 
   // click event listener for customer delete button
   $(document).on("click", "#deleteCustomer", handleCustomerDelete);
+  $(document).on("click", "#showAllBtn", handleShowAll)
 
   // Function for creating a new list row for customers
   function createCustomerRow(customerData) {
@@ -62,15 +63,23 @@ $(document).ready(function () {
 
       $("#customerTable").fancyTable({
         sortColumn:0,
+        sortable:false,
         pagination: true,
+        paginationClass: 'btn btn-link',
         perPage:10,
         globalSearch:true,
         // name column is technically column 2 due to hidden id column
         // and last 2 columns are view/delete links.  3rd column is phone
         // leaving only name search.
         globalSearchExcludeColumns: [1,3,4,5],
-        inputPlaceholder: "Search by Name..."
-      });      
+        inputPlaceholder: "Search by Name...",
+        // upon initialization and any action regarding fancyTable,
+        // prepend our custom show all button to the footer, in line
+        // with all the pagination.
+        onUpdate: function(){
+          $("tfoot td").prepend("<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>")
+        }
+      });
 
       // $(".fancySearchRow").children("th:last").remove()
 
@@ -120,14 +129,16 @@ $(document).ready(function () {
 
   // function to render div with text when search finds no matches.
   function renderNoMatch() {
-    // remove div with pagination buttons
-    $("#page-nav").remove();
     // empty all table body content
     $("#customerTable tbody").empty();
+    // remove table footer which contains pagination
+    $("tfoot").remove()
 
     var alertDiv = $("<div>");
-    // removing alert div in case user clicks search again, without this new alert divs would keep appearing.
+    var showAllDiv = $("<div id='showAllDiv'>")
+    // removing divs in case user clicks search again, without this new alert divs would keep appearing.
     $(".alert").remove();
+    $("#showAllDiv").remove();
     // save searched string to use to use in url should the user click
     // the link to add as a new customer
     var searchedString = $("#phoneSearchInput").val().trim();
@@ -143,10 +154,28 @@ $(document).ready(function () {
         " to add as a new customer."
     );
     customerContainer.append(alertDiv);
+    customerContainer.append(showAllDiv)
     // this link will take us to a addCustomer page, but the url will include
     // the phone number user initially searched for, so we can take it and
     // pre insert it into the form
     $("#noMatchesLink").attr("href", "/addCustomer?phone=" + searchedString);
+    // appending a div at the end to imitate the normal t.footer which
+    // contains the pagination.  This will have only the show all link
+    // so the user can repopulate the table without having to refresh the
+    // entire page
+    $("#showAllDiv").append("<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>")
+  }
+
+  // function to handle show all link
+  function handleShowAll() {
+    // clear table contents
+    $("#customerTable tbody").empty()
+    // remove search row as it will render again
+    $(".fancySearchRow").remove()
+    // same with showAllDiv if it was present
+    $("#showAllDiv").remove()
+    // rerun function to get all data from server and render
+    getCustomers()
   }
 
   // Function for handling search
@@ -166,6 +195,11 @@ $(document).ready(function () {
         rowsToAdd.push(createCustomerRow(data));
         renderCustomerList(rowsToAdd);
       }
+    }).then(function() {
+      // remove search and pagination rows
+      $(".fancySearchRow").remove()
+      $(".pag").remove()
+      $("tfoot tr").append("<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>")
     })
   });
 
@@ -176,17 +210,8 @@ $(document).ready(function () {
     // was somehow messing with $data storage.  Retreiving customer's id
     // from hidden id column.
 
-    // grabbing row's string data
-    var listItemData = $(this).parent("td").parent("tr").text()
-    // splitting it at spaces
-    var listItemDataSplit = listItemData.split(" ")
-    // grabbing first set of strings after split, which contains the id
-    // number and the first and last name
-    var listItemDataFirstSplit = listItemDataSplit[0]
-    // extract the numbers from the string, leaving us with just the id
-    var listItemDataMatch = listItemDataFirstSplit.match(/(\d+)/)
-
-    var id = listItemDataMatch[0];
+    // grabbing customer id from the hidden column
+    var id = $(this).parent("td").parent("tr").children("td:first").text()
     // console.log(id)
     var confirmDelete = confirm(
       "Confirm delete of customer?"

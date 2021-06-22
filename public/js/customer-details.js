@@ -153,6 +153,8 @@ $(document).ready(function () {
     // table pagination
     $("#saleTable").fancyTable({
       pagination: true,
+      paginationClass: 'btn btn-link',
+      sortable:false,
       perPage:10,
       globalSearch:true,
       // exclude first 2 columns, which are hidden and hold customer and
