@@ -62,7 +62,7 @@ $(document).ready(function () {
       // table pagination
 
       $("#customerTable").fancyTable({
-        sortColumn:0,
+        sortColumn:1,
         sortable:false,
         pagination: true,
         paginationClass: 'btn btn-link',

@@ -152,6 +152,7 @@ $(document).ready(function () {
 
     // table pagination
     $("#saleTable").fancyTable({
+      sortColumn:1,
       pagination: true,
       paginationClass: 'btn btn-link',
       sortable:false,
