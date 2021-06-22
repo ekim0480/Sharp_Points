@@ -55,8 +55,14 @@ $(document).ready(function () {
         sortColumn: 0,
         pagination: true,
         perPage: 10,
-        searchable: false,
+        globalSearch: false,
+        inputPlaceholder: "Search by Name",
       });
+
+      // removing search fields for each column, leaving only name search
+      $(".fancySearchRow").children().last().remove();
+      $(".fancySearchRow").children().last().remove();
+      $(".fancySearchRow").children().last().remove();
     } else {
       renderEmpty();
     }
@@ -74,6 +80,8 @@ $(document).ready(function () {
   function renderNoMatch() {
     // remove footer which housed the pagination
     $("tfoot").remove();
+    // remove name search bar
+    $(".fancySearchRow").children().last().remove();
 
     // empty all table body content
     $("#customerTable tbody").empty();
