@@ -49,30 +49,13 @@ $(document).ready(function () {
     if (rows.length) {
       //   console.log(rows);
       customerList.prepend(rows);
+
       // table pagination
-      $("#customerTable").after('<div id="nav"></div>');
-      var rowsShown = 10;
-      var rowsTotal = $("#customerTable tbody tr").length;
-      var numPages = rowsTotal / rowsShown;
-      for (i = 0; i < numPages; i++) {
-        var pageNum = i + 1;
-        $("#nav").append('<a href="#" rel="' + i + '">' + pageNum + "</a> ");
-      }
-      $("#customerTable tbody tr").hide();
-      $("#customerTable tbody tr").slice(0, rowsShown).show();
-      $("#nav a:first").addClass("active");
-      $("#nav a").bind("click", function () {
-        $("#nav a").removeClass("active");
-        $(this).addClass("active");
-        var currPage = $(this).attr("rel");
-        var startItem = currPage * rowsShown;
-        var endItem = startItem + rowsShown;
-        $("#customerTable tbody tr")
-          .css("opacity", "0.0")
-          .hide()
-          .slice(startItem, endItem)
-          .css("display", "table-row")
-          .animate({ opacity: 1 }, 300);
+      $("#customerTable").fancyTable({
+        sortColumn: 0,
+        pagination: true,
+        perPage: 10,
+        searchable: false,
       });
     } else {
       renderEmpty();
