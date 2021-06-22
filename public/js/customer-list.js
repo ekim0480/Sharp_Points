@@ -72,9 +72,15 @@ $(document).ready(function () {
 
   // function to render div with text when search finds no matches.
   function renderNoMatch() {
-    $("#nav").remove();
+    // remove footer which housed the pagination
+    $("tfoot").remove();
+
+    // empty all table body content
     $("#customerTable tbody").empty();
+
     var alertDiv = $("<div>");
+    // removing alert div in case user clicks search again, without this new alert divs would keep appearing.
+    $(".alert").remove();
     // save searched string to use to use in url should the user click
     // the link to add as a new customer
     var searchedString = $("#phoneSearchInput").val().trim();
@@ -90,6 +96,9 @@ $(document).ready(function () {
         " to add as a new customer."
     );
     customerContainer.append(alertDiv);
+    // this link will take us to a addCustomer page, but the url will include
+    // the phone number user initially searched for, so we can take it and
+    // pre insert it into the form
     $("#noMatchesLink").attr("href", "/addCustomer?phone=" + searchedString);
   }
 
