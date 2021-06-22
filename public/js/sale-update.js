@@ -19,6 +19,8 @@ $(document).ready(function () {
   var originalPointValueOfSale;
 
   // declaring dom variables
+  var createdAtSpan = $("#createdAt")
+  var updatedAtSpan = $("#updatedAt")
   var idInput = $("#idInput");
   var typeInput = $("#typeInput");
   var originInput = $("#originInput");
@@ -45,7 +47,7 @@ $(document).ready(function () {
     }
     $.get("/sales/" + saleId, function (data) {
       console.log("Sale", data);
-      console.log("customerid", data.Customer.id);
+      // console.log("customerid", data.Customer.id);
     }).then(function (data) {
       // pre-select "type" option to match the sale's original type
       // console.log(data.type);
@@ -67,6 +69,8 @@ $(document).ready(function () {
       }
 
       // pre-insert the sale's data into the corresponding input fields
+      createdAtSpan.text("Created: " + data.createdAt)
+      updatedAtSpan.text("Last updated: " + data.updatedAt)
       idInput.val(data.id);
       typeInput.val(data.type);
       originInput.val(data.origin);
