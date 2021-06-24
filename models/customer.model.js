@@ -50,9 +50,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
     },
-    mileage: {
-      type: DataTypes.STRING(15)
-    },
     totalPoints: {
       type: DataTypes.INTEGER(5).UNSIGNED.ZEROFILL,
       defaultValue: "0",

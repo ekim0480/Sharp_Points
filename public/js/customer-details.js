@@ -66,6 +66,11 @@ $(document).ready(function () {
       li4.textContent = "Date of Birth: " + data.dob;
       li5.textContent = "Phone: " + data.phone;
       li6.textContent = "E-mail: " + data.email;
+
+      if (data.Mileages[0] == null) {
+        data.Mileages[0] === "";
+      }
+
       li7.textContent = "Mileage: " + data.Mileages[0].mileage;
       // append the list to #customerDetailsRow
       $("#customerDetailsRow").append(listEl);
