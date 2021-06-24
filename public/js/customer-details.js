@@ -68,10 +68,11 @@ $(document).ready(function () {
       li6.textContent = "E-mail: " + data.email;
 
       if (data.Mileages[0] == null) {
-        data.Mileages[0] === "";
+        li7.textContent = "Mileage: " + "";
+      } else {
+        li7.textContent = "Mileage: " + data.Mileages[0].mileage;
       }
 
-      li7.textContent = "Mileage: " + data.Mileages[0].mileage;
       // append the list to #customerDetailsRow
       $("#customerDetailsRow").append(listEl);
       // append each list item to the newly appended list
