@@ -6,6 +6,7 @@ module.exports = function (app) {
   app.get("/customers", function (req, res) {
     db.Customer.findAll({
       // include: [db.Sale]
+      // include: [db.Mileage],
       order: [["lastName", "ASC"]],
     }).then(function (dbCustomer) {
       res.json(dbCustomer);
@@ -16,6 +17,7 @@ module.exports = function (app) {
   app.get("/customers/:id", function (req, res) {
     // Find one Customer with the id in req.params.id and return them to the user with res.json
     db.Customer.findOne({
+      include: [db.Mileage],
       where: {
         id: req.params.id,
       },
@@ -56,9 +58,12 @@ module.exports = function (app) {
       dob: customerData.dob,
       phone: customerData.phone,
       email: customerData.email,
-      mileage: customerData.mileage,
     }).then(function (newCustomer) {
       res.json(newCustomer);
+      db.Mileage.create({
+        mileage: customerData.mileage,
+        CustomerId: newCustomer.id,
+      });
     });
   });
 

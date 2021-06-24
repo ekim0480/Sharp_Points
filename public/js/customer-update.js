@@ -35,7 +35,7 @@ $(document).ready(function () {
       $("#dobInput").val(data.dob);
       $("#phoneInput").val(data.phone);
       $("#emailInput").val(data.email);
-      $("#mileageInput").val(data.mileage);
+      $("#mileageInput").val(data.Mileages[0].mileage);
     });
   }
 

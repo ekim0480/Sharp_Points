@@ -51,8 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     mileage: {
-      type: DataTypes.STRING(20),
-      allowNull: true,
+      type: DataTypes.STRING(15)
     },
     totalPoints: {
       type: DataTypes.INTEGER(5).UNSIGNED.ZEROFILL,
@@ -70,7 +69,9 @@ module.exports = (sequelize, DataTypes) => {
 
   // Telling our model that each Customer can have many mileage numbers
   Customer.associate = function (models) {
-    Customer.belongsToMany(models.Mileage, { through: "CustomerMileage" });
+    Customer.hasMany(models.Mileage, {
+      onDelete: "cascade"
+    })
   };
 
   return Customer;

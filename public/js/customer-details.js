@@ -66,7 +66,7 @@ $(document).ready(function () {
       li4.textContent = "Date of Birth: " + data.dob;
       li5.textContent = "Phone: " + data.phone;
       li6.textContent = "E-mail: " + data.email;
-      li7.textContent = "Mileage: " + data.mileage;
+      li7.textContent = "Mileage: " + data.Mileages[0].mileage;
       // append the list to #customerDetailsRow
       $("#customerDetailsRow").append(listEl);
       // append each list item to the newly appended list
@@ -76,6 +76,7 @@ $(document).ready(function () {
       listEl.appendChild(li4);
       listEl.appendChild(li5);
       listEl.appendChild(li6);
+      listEl.appendChild(li7);
     });
   }
 
@@ -108,8 +109,8 @@ $(document).ready(function () {
     // newTr.addClass("paginate");
 
     newTr.data("sale", saleData);
-    newTr.append("<td class='tableHeadId'>" + saleData.Customer.id + "</td>")
-    newTr.append("<td class='tableHeadId'>" + saleData.id + "</td>")
+    newTr.append("<td class='tableHeadId'>" + saleData.Customer.id + "</td>");
+    newTr.append("<td class='tableHeadId'>" + saleData.id + "</td>");
     newTr.append("<td>" + saleData.type + "</td>");
     newTr.append("<td>" + saleData.origin + "</td>");
     newTr.append("<td>" + saleData.depDetails + "</td>");
@@ -152,17 +153,17 @@ $(document).ready(function () {
 
     // table pagination
     $("#saleTable").fancyTable({
-      sortColumn:1,
+      sortColumn: 1,
       pagination: true,
-      paginationClass: 'btn btn-link',
-      sortable:false,
-      perPage:10,
-      globalSearch:true,
+      paginationClass: "btn btn-link",
+      sortable: false,
+      perPage: 10,
+      globalSearch: true,
       // exclude first 2 columns, which are hidden and hold customer and
       // sale id values, and last 2 columns, which are links to view/delete
-      globalSearchExcludeColumns: [1,2,12,13],
-      inputPlaceholder: "Search All..."
-    });   
+      globalSearchExcludeColumns: [1, 2, 12, 13],
+      inputPlaceholder: "Search All...",
+    });
 
     // // simplePagination.js code
     // // Grab whatever we need to paginate
@@ -326,19 +327,27 @@ $(document).ready(function () {
     // console.log(testItemData);
 
     // workaround because fancyTable.js was messing with our jquery data
-    // storage.  Included hidden columns containing both customer and 
+    // storage.  Included hidden columns containing both customer and
     // sale ids, and referred to text in "nth" columns to retreive the
     // necessary data.
-    var customerId = $(this).parent("td").parent("tr").children("td:first").text()
-    var saleId = $(this).parent("td").parent("tr").children("td:nth-child(2)").text()
+    var customerId = $(this)
+      .parent("td")
+      .parent("tr")
+      .children("td:first")
+      .text();
+    var saleId = $(this)
+      .parent("td")
+      .parent("tr")
+      .children("td:nth-child(2)")
+      .text();
 
     // grabbing values we need to update Customer's total point value after
     // subtracting the current sale's point value from the Customer's
     // original total point value.
-    var customerOriginalTotalPoints = parseInt(
-      $("#pointTotal").text()
+    var customerOriginalTotalPoints = parseInt($("#pointTotal").text());
+    var salePointValue = parseInt(
+      $(this).parent("td").parent("tr").children("td:nth-child(11)").text()
     );
-    var salePointValue = parseInt($(this).parent("td").parent("tr").children("td:nth-child(11)").text());
     // console.log(salePointValue)
 
     // perform math to subtract this sale's points from the Customer's
