@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       notEmpty: true,
     },
     gender: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     dob: {
       type: DataTypes.DATEONLY,
@@ -40,14 +40,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(30),
       allowNull: true,
       validate: {
-        isEmailOrEmpty:(val, next) => {
+        isEmailOrEmpty: (val, next) => {
           if (!val || val === "" || validateEmail(val)) {
-            return next()
+            return next();
+          } else {
+            return next("Email is invalid!");
           }
-          else {
-            return next("Email is invalid!")
-          }
-        }
+        },
       },
     },
     totalPoints: {
@@ -67,8 +66,8 @@ module.exports = (sequelize, DataTypes) => {
   // Telling our model that each Customer can have many mileage numbers
   Customer.associate = function (models) {
     Customer.hasMany(models.Mileage, {
-      onDelete: "cascade"
-    })
+      onDelete: "cascade",
+    });
   };
 
   return Customer;

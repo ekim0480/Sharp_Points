@@ -1,4 +1,5 @@
 // require in our models
+const { where } = require("sequelize/types");
 const db = require("../models");
 
 module.exports = function (app) {
@@ -16,7 +17,12 @@ module.exports = function (app) {
     });
   });
 
-  // app.put
+  // app.put("/mileages", function (req, res) {
+  //   db.Mileage.update(
+  //     { mileage: req.body.mileage },
+  //     { where: }
+  //     )
+  // })
 
   // app.delete
 };

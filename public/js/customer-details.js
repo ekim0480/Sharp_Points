@@ -7,7 +7,8 @@ $(document).ready(function () {
 
   // saleContainer holds all of our sales
   var saleContainer = $("#sale-container");
-  var saleList = $("tbody");
+  var saleList = $("#saleTableBody");
+  var mileageList = $("#mileageTableBody");
 
   // dom variable to display point total
   var pointTotal = $("#pointTotal");
@@ -18,9 +19,13 @@ $(document).ready(function () {
   $(document).on("click", "#editDetailsBtn", handleEditDetails);
   $(document).on("click", "#redeemPointsBtn", handleHiddenFormReveal);
   $(document).on("click", "#confirmRedeemBtn", handleConfirmRedeem);
+  $(document).on("click", "#addMileageBtn", handleAddMileage);
+  $(document).on("click", "#deleteMileage", handleMileageDelete);
   // $(document).on("click", "#viewSale", handleViewSale)
   // Variable to hold our sales
   var sales;
+
+  var mileages;
 
   // The code below handles the case where we want to get sales for a specific customer
   // Looks for a query param in the url for customer_id
@@ -44,6 +49,8 @@ $(document).ready(function () {
     }
     $.get("/customers/" + customerId, function (data) {
       console.log("Customer", data);
+
+      mileages = data.Mileages;
     }).then(function (data) {
       // printing customer data
       // declaring dom variables
@@ -54,7 +61,6 @@ $(document).ready(function () {
       var li4 = document.createElement("li");
       var li5 = document.createElement("li");
       var li6 = document.createElement("li");
-      var li7 = document.createElement("li");
 
       // display retrieved total point value
       pointTotal.text(data.totalPoints);
@@ -67,14 +73,14 @@ $(document).ready(function () {
       li5.textContent = "Phone: " + data.phone;
       li6.textContent = "E-mail: " + data.email;
 
-      if (data.Mileages[0] == null) {
-        li7.textContent = "Mileage: " + "";
-      } else {
-        li7.textContent = "Mileage: " + data.Mileages[0].mileage;
-      }
+      // if (data.Mileages[0] == null) {
+      //   li7.textContent = "Mileage: " + "";
+      // } else {
+      //   li7.textContent = "Mileage: " + data.Mileages[0].mileage;
+      // }
 
-      // append the list to #customerDetailsRow
-      $("#customerDetailsRow").append(listEl);
+      // append the list and link
+      $("#customerDataCol").append(listEl);
       // append each list item to the newly appended list
       listEl.appendChild(li1);
       listEl.appendChild(li2);
@@ -82,7 +88,8 @@ $(document).ready(function () {
       listEl.appendChild(li4);
       listEl.appendChild(li5);
       listEl.appendChild(li6);
-      listEl.appendChild(li7);
+
+      initializeMileageRows();
     });
   }
 
@@ -411,5 +418,85 @@ $(document).ready(function () {
     // phone number in the url so we can pre-insert it into the form.
     alertDiv.html("No Sales Found");
     $("#sale-container").append(alertDiv);
+  }
+
+  function handleAddMileage(event) {
+    event.preventDefault();
+
+    if (
+      $("#addMileageInput").val() == null ||
+      $("#addMileageInput").val() == ""
+    ) {
+      return;
+    } else if ($("#addMileageInput").val().length > 15) {
+      alert("Mileage number cannot exceed 15 characters.");
+      $("#addMileageInput").val("");
+      return;
+    }
+    // set variable for the id of the customer the mileage belongs to
+    customerId = window.location.search.split("=")[1];
+
+    var newMileage = {
+      mileage: $("#addMileageInput").val().trim(),
+      customerId: customerId,
+    };
+
+    $.post("/mileages", newMileage).then(function (data) {
+      console.log(data);
+
+      var newTr = $("<tr>");
+
+      newTr.append("<td class='tableHeadId'>" + data.id + "</td>");
+      newTr.append("<td>" + data.mileage + "</td>");
+
+      // add delete link
+      newTr.append(
+        "<td><a style='cursor:pointer;color:red' id='deleteMileage'>X</a></td>"
+      );
+      mileageList.append(newTr);
+      $("#addMileageInput").val("");
+    });
+  }
+
+  function createMileageRow(mileageData) {
+    // console.log(saleData);
+    // console.log(saleData.origin)
+    var newTr = $("<tr>");
+
+    newTr.data("mileage", mileageData);
+    newTr.append("<td class='tableHeadId'>" + mileageData.id + "</td>");
+    newTr.append("<td>" + mileageData.mileage + "</td>");
+
+    // add delete link
+    newTr.append(
+      "<td><a style='cursor:pointer;color:red' id='deleteMileage'>X</a></td>"
+    );
+    return newTr;
+  }
+
+  function initializeMileageRows() {
+    var mileagesToAdd = [];
+    for (var i = 0; i < mileages.length; i++) {
+      mileagesToAdd.push(createMileageRow(mileages[i]));
+    }
+    // console.log(salesToAdd);
+    renderMileageList(mileagesToAdd);
+  }
+
+  function renderMileageList(rows) {
+    mileageList.children().not(":last").remove();
+
+    // console.log(rows.length);
+    mileageList.prepend(rows);
+  }
+
+  function handleMileageDelete() {
+    $(this).closest("tr").remove();
+    var mileageId = $(this).closest("tr").children("td:first").text();
+    console.log(mileageId);
+    $.ajax({
+      method: "DELETE",
+      url: "/mileages/" + mileageId,
+    }).then(function () {});
   }
 });

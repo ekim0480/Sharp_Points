@@ -5,7 +5,7 @@ $(document).ready(function () {
   var dobInput = $("#dobInput");
   var phoneInput = $("#phoneInput");
   var emailInput = $("#emailInput");
-  var mileageInput = $("#mileageInput");
+  // var mileageInput = $("#mileageInput");
 
   // if coming from the link to add customer after a search returned no
   // results, get the phone number from the url, and pre-insert it into the form
@@ -55,7 +55,7 @@ $(document).ready(function () {
         dob: dobInput.val().trim(),
         phone: phoneInput.val().trim(),
         email: emailInput.val().trim(),
-        mileage: mileageInput.val().trim(),
+        // mileage: mileageInput.val().trim(),
       };
 
       // send an AJAX POST request with jQuery

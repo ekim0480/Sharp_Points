@@ -26,6 +26,10 @@ h2 {
   margin-top: 50px;
 }
 
+#customerMileageForm {
+  margin-top: 0px;
+}
+
 #typeInput {
   margin-left: 50px;
 }
@@ -94,4 +98,8 @@ legend {
 #showAllLink {
   font-weight: bold;
   text-align: right;
+}
+
+#buttonsRow {
+  margin-top: 50px;
 }

@@ -8,7 +8,7 @@ $(document).ready(function () {
 
   // click event listener for customer delete button
   $(document).on("click", "#deleteCustomer", handleCustomerDelete);
-  $(document).on("click", "#showAllBtn", handleShowAll)
+  $(document).on("click", "#showAllBtn", handleShowAll);
 
   // Function for creating a new list row for customers
   function createCustomerRow(customerData) {
@@ -20,9 +20,9 @@ $(document).ready(function () {
 
     newTr.data("customer", customerData);
     // fancytables plugin was screwing up tr data storage above somehow
-    // thus the delete button wasn't working.  workaround by including ID 
+    // thus the delete button wasn't working.  workaround by including ID
     // as a hidden column and referring to it that way.
-    newTr.append("<td class='tableHeadId'>" + customerData.id + "</td>")
+    newTr.append("<td class='tableHeadId'>" + customerData.id + "</td>");
     newTr.append(
       "<td>" + customerData.lastName + ", " + customerData.firstName + "</td>"
     );
@@ -62,27 +62,28 @@ $(document).ready(function () {
       // table pagination
 
       $("#customerTable").fancyTable({
-        sortColumn:1,
-        sortable:false,
+        sortColumn: 1,
+        sortable: false,
         pagination: true,
-        paginationClass: 'btn btn-link',
-        perPage:10,
-        globalSearch:true,
+        paginationClass: "btn btn-link",
+        perPage: 10,
+        globalSearch: true,
         // name column is technically column 2 due to hidden id column
         // and last 2 columns are view/delete links.  3rd column is phone
         // leaving only name search.
-        globalSearchExcludeColumns: [1,3,4,5],
+        globalSearchExcludeColumns: [1, 3, 4, 5],
         inputPlaceholder: "Search by Name...",
         // upon initialization and any action regarding fancyTable,
         // prepend our custom show all button to the footer, in line
         // with all the pagination.
-        onUpdate: function(){
-          $("tfoot td").prepend("<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>")
-        }
+        onUpdate: function () {
+          $("tfoot td").prepend(
+            "<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>"
+          );
+        },
       });
 
       // $(".fancySearchRow").children("th:last").remove()
-
 
       // // simplePagination.js code
       // // Grab whatever we need to paginate
@@ -132,10 +133,10 @@ $(document).ready(function () {
     // empty all table body content
     $("#customerTable tbody").empty();
     // remove table footer which contains pagination
-    $("tfoot").remove()
+    $("tfoot").remove();
 
     var alertDiv = $("<div>");
-    var showAllDiv = $("<div id='showAllDiv'>")
+    var showAllDiv = $("<div id='showAllDiv'>");
     // removing divs in case user clicks search again, without this new alert divs would keep appearing.
     $(".alert").remove();
     $("#showAllDiv").remove();
@@ -154,7 +155,7 @@ $(document).ready(function () {
         " to add as a new customer."
     );
     customerContainer.append(alertDiv);
-    customerContainer.append(showAllDiv)
+    customerContainer.append(showAllDiv);
     // this link will take us to a addCustomer page, but the url will include
     // the phone number user initially searched for, so we can take it and
     // pre insert it into the form
@@ -163,19 +164,21 @@ $(document).ready(function () {
     // contains the pagination.  This will have only the show all link
     // so the user can repopulate the table without having to refresh the
     // entire page
-    $("#showAllDiv").append("<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>")
+    $("#showAllDiv").append(
+      "<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>"
+    );
   }
 
   // function to handle show all link
   function handleShowAll() {
     // clear table contents
-    $("#customerTable tbody").empty()
+    $("#customerTable tbody").empty();
     // remove search row as it will render again
-    $(".fancySearchRow").remove()
+    $(".fancySearchRow").remove();
     // same with showAllDiv if it was present
-    $("#showAllDiv").remove()
+    $("#showAllDiv").remove();
     // rerun function to get all data from server and render
-    getCustomers()
+    getCustomers();
   }
 
   // Function for handling search
@@ -186,36 +189,37 @@ $(document).ready(function () {
     $.ajax({
       url: queryURL,
       method: "GET",
-    }).then(function (data) {
-      if (data === null) {
-        renderNoMatch();
-      } else {
-        var rowsToAdd = [];
-        $("#customerTable tbody").empty();
-        rowsToAdd.push(createCustomerRow(data));
-        renderCustomerList(rowsToAdd);
-      }
-    }).then(function() {
-      // remove search and pagination rows
-      $(".fancySearchRow").remove()
-      $(".pag").remove()
-      $("tfoot tr").append("<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>")
     })
+      .then(function (data) {
+        if (data === null) {
+          renderNoMatch();
+        } else {
+          var rowsToAdd = [];
+          $("#customerTable tbody").empty();
+          rowsToAdd.push(createCustomerRow(data));
+          renderCustomerList(rowsToAdd);
+        }
+      })
+      .then(function () {
+        // remove search and pagination rows
+        $(".fancySearchRow").remove();
+        $(".pag").remove();
+        $("tfoot tr").append(
+          "<a style='margin: 0.2em; cursor: pointer' class='btn btn-link' id='showAllBtn'>Show All</a>"
+        );
+      });
   });
 
   // Function for handling delete
   function handleCustomerDelete() {
-
     // workaround for getting customer id to delete, since fancyTables
     // was somehow messing with $data storage.  Retreiving customer's id
     // from hidden id column.
 
     // grabbing customer id from the hidden column
-    var id = $(this).parent("td").parent("tr").children("td:first").text()
+    var id = $(this).parent("td").parent("tr").children("td:first").text();
     // console.log(id)
-    var confirmDelete = confirm(
-      "Confirm delete of customer?"
-    );
+    var confirmDelete = confirm("Confirm delete of customer?");
     if (confirmDelete) {
       $.ajax({
         method: "DELETE",

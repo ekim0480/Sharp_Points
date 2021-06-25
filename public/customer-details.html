@@ -72,9 +72,35 @@
     <!-- Start body container -->
     <div class="container" id="customerDetailsContainer">
         <div class="row" id="customerDetailsRow">
+          <div class="col-md-4 col-sm-4" id="customerDataCol">
+          </div>
+          <div class="col-md-4 col-sm-4" id="customerMileageCol">
+            <form class="forms" action="" id="customerMileageForm">
+              <div class="input-group mb-3" id="addMileageDiv">
+                <input
+                  type="text"
+                  name="mileage"
+                  id="addMileageInput"
+                  class="form-control"
+                  placeholder="Add Mileage Number"
+                />
+                <button class="btn btn-primary" type="submit" id="addMileageBtn">
+                  Add
+                </button>
+              </div>
+            </form>
+            <table class="table" id="mileageTable">
+              <thead>
+                <tr>
+                </tr>
+              </thead>
+              <tbody id="mileageTableBody">
+              </tbody>
+            </table>
+          </div>
             
         </div>
-        <div class="row">
+        <div class="row" id="buttonsRow">
           <div class="col-md-2 col-sm-2">
             <a class="btn btn-primary" id="newSaleBtn">New Sale</a>
           </div>
@@ -123,7 +149,7 @@
                   <th>Points</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="saleTableBody">
               </tbody>
             </table>
             <!-- prepare div for pagination with simplePagination.js-->

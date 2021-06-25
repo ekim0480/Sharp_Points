@@ -6,7 +6,7 @@ $(document).ready(function () {
     customerId = url.split("=")[1];
     getCustomerData(customerId);
   }
-
+  // var mileageId
   // event listener for the submit button
   $(document).on(
     "submit",
@@ -23,6 +23,7 @@ $(document).ready(function () {
     $.get("/customers/" + customerId, function (data) {
       console.log("Customer", data);
     }).then(function (data) {
+      // mileageId = data.Mileages[0].id
       // selecting radio button
       $("input[name=gender][value=" + data.gender + "]").attr(
         "checked",
@@ -35,13 +36,19 @@ $(document).ready(function () {
       $("#dobInput").val(data.dob);
       $("#phoneInput").val(data.phone);
       $("#emailInput").val(data.email);
-      $("#mileageInput").val(data.Mileages[0].mileage);
+      // if (data.Mileage == null) {
+      //   $("#mileageInput").val("")
+      // } else {
+      // $("#mileageInput").val(data.Mileages[0].mileage);
+
+      // }
     });
   }
 
   // function to handle form submission
   function handleCustomerUpdateFormSubmit(event) {
     event.preventDefault();
+
     // if required fields are missing, alert and terminate function
     if (
       !$("#firstNameInput").val().trim().trim() ||
@@ -71,7 +78,7 @@ $(document).ready(function () {
         dob: $("#dobInput").val().trim(),
         phone: $("#phoneInput").val().trim(),
         email: $("#emailInput").val().trim(),
-        mileage: $("#mileageInput").val().trim(),
+        // mileage: $("#mileageInput").val().trim(),
       };
       // console.log(JSON.stringify(updateCustomer))
       // make ajax call with PUT method to update the corresponding customer's data with data in updateCustomer object.
@@ -81,7 +88,12 @@ $(document).ready(function () {
         contentType: "application/json",
         data: JSON.stringify(updateCustomer),
         dataType: "json",
+        // success: function() {
+        //   console.log(mileageId)
+        // }
       }).then(function (updateCustomer) {
+        console.log("updateCustomer", updateCustomer);
+        // console.log()
         alert("Customer Information Updated!");
         // send user back to the corresponding customer's details page
         window.location.href =

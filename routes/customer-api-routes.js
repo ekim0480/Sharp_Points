@@ -60,12 +60,19 @@ module.exports = function (app) {
       email: customerData.email,
     }).then(function (newCustomer) {
       res.json(newCustomer);
-      db.Mileage.create({
-        mileage: customerData.mileage,
-        CustomerId: newCustomer.id,
-      });
     });
   });
+
+  app.post("/mileages", function (req, res) {
+    var mileageData = req.body
+
+    db.Mileage.create({
+      mileage: mileageData.mileage,
+      CustomerId: mileageData.customerId
+    }).then(function (newMileage) {
+      res.json(newMileage)
+    })
+  })
 
   // route to update a customer's point total
   app.put("/addPoints", function (req, res) {
@@ -104,4 +111,14 @@ module.exports = function (app) {
       res.json(dbCustomer);
     });
   });
+
+  app.delete("/mileages/:id", function (req, res) {
+    db.Mileage.destroy({
+      where: {
+        id: req.params.id
+      }
+    }).then(function (dbMileage) {
+      res.json(dbMileage)
+    })
+  })
 };

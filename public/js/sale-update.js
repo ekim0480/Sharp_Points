@@ -19,8 +19,8 @@ $(document).ready(function () {
   var originalPointValueOfSale;
 
   // declaring dom variables
-  var createdAtSpan = $("#createdAt")
-  var updatedAtSpan = $("#updatedAt")
+  var createdAtSpan = $("#createdAt");
+  var updatedAtSpan = $("#updatedAt");
   var idInput = $("#idInput");
   var typeInput = $("#typeInput");
   var originInput = $("#originInput");
@@ -69,8 +69,8 @@ $(document).ready(function () {
       }
 
       // pre-insert the sale's data into the corresponding input fields
-      createdAtSpan.text("Created: " + data.createdAt)
-      updatedAtSpan.text("Last updated: " + data.updatedAt)
+      createdAtSpan.text("Created: " + data.createdAt);
+      updatedAtSpan.text("Last updated: " + data.updatedAt);
       idInput.val(data.id);
       typeInput.val(data.type);
       originInput.val(data.origin);

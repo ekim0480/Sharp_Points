@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     // Giving the Mileage model structure
     mileage: {
       type: DataTypes.STRING(15),
+      allowNull: false,
     },
   });
 
