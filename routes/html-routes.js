@@ -12,6 +12,7 @@ var passport = require("passport");
 module.exports = function (app) {
   app.post(
     "/signup",
+    notLoggedIn,
     passport.authenticate("local-signup", {
       successRedirect: "/",
 
@@ -21,6 +22,7 @@ module.exports = function (app) {
 
   app.post(
     "/signin",
+    notLoggedIn,
     passport.authenticate("local-signin", {
       successRedirect: "/",
 
@@ -36,11 +38,11 @@ module.exports = function (app) {
   });
 
   //
-  app.get("/signup", function (req, res) {
+  app.get("/signup", notLoggedIn, function (req, res) {
     res.sendFile(path.join(__dirname, "../public/signup.html"));
   });
 
-  app.get("/signin", function (req, res) {
+  app.get("/signin", notLoggedIn, function (req, res) {
     res.sendFile(path.join(__dirname, "../public/signin.html"));
   });
 
@@ -52,6 +54,13 @@ module.exports = function (app) {
     if (req.isAuthenticated()) return next();
 
     res.redirect("/signin");
+  }
+
+  function notLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+      res.redirect('/')
+    }
+    next()
   }
 
   // Each of the below routes just handles the HTML page that the user gets sent to.
