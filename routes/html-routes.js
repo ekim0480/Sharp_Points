@@ -46,10 +46,6 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, "../public/signin.html"));
   });
 
-  // app.get("/dashboard", isLoggedIn, function (req, res) {
-  //   res.sendFile(path.join(__dirname, "../public/dashboard.html"));
-  // });
-
   function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) return next();
 
