@@ -24,11 +24,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // For Passport
+app.use(cookieParser())
 app.use(
   session({
     secret: process.env.secret,
     resave: false,
     saveUninitialized: false,
+    cookie:{maxAge:3600000*24}
   })
 ); // session secret
 app.use(passport.initialize());
