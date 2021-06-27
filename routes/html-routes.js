@@ -58,9 +58,9 @@ module.exports = function (app) {
 
   function notLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
-      res.redirect('/')
+      res.redirect("/");
     }
-    next()
+    next();
   }
 
   // Each of the below routes just handles the HTML page that the user gets sent to.
