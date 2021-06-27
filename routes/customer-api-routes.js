@@ -64,15 +64,15 @@ module.exports = function (app) {
   });
 
   app.post("/mileages", function (req, res) {
-    var mileageData = req.body
+    var mileageData = req.body;
 
     db.Mileage.create({
       mileage: mileageData.mileage,
-      CustomerId: mileageData.customerId
+      CustomerId: mileageData.customerId,
     }).then(function (newMileage) {
-      res.json(newMileage)
-    })
-  })
+      res.json(newMileage);
+    });
+  });
 
   // route to update a customer's point total
   app.put("/addPoints", function (req, res) {
@@ -115,10 +115,10 @@ module.exports = function (app) {
   app.delete("/mileages/:id", function (req, res) {
     db.Mileage.destroy({
       where: {
-        id: req.params.id
-      }
+        id: req.params.id,
+      },
     }).then(function (dbMileage) {
-      res.json(dbMileage)
-    })
-  })
+      res.json(dbMileage);
+    });
+  });
 };

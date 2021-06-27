@@ -1,5 +1,4 @@
 // require in our models
-const { where } = require("sequelize/types");
 const db = require("../models");
 
 module.exports = function (app) {
