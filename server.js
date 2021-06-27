@@ -26,8 +26,7 @@ app.use(express.json());
 // For Passport
 app.use(
   session({
-    secret: 'boohoolulumongo',
-    // secret: process.env.SESSION_SECRET,
+    secret: process.env.secret,
     resave: false,
     saveUninitialized: false,
   })
