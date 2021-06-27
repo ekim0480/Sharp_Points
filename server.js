@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // For Passport
+
 app.use(
   session({
     secret: process.env.secret,

@@ -54,24 +54,33 @@ module.exports = function (passport, user) {
             });
           }
         });
-        //serialize
-        passport.serializeUser(function (user, done) {
-          done(null, user.id);
-        });
 
-        // deserialize user
-        passport.deserializeUser(function (id, done) {
-          User.findByPk(id).then(function (user) {
-            if (user) {
-              done(null, user.get());
-            } else {
-              done(user.errors, null);
-            }
-          });
-        });
+        // passport.serializeUser(function(user, done) {
+        //   done(null, user);
+        // });
+
+        // passport.deserializeUser(function(user, done) {
+        //   done(null, user);
+        // });
       }
     )
   );
+  // serialize
+  passport.serializeUser(function (user, done) {
+    console.log("user.id", user.id);
+    done(null, user.id);
+  });
+
+  // deserialize user
+  passport.deserializeUser(function (id, done) {
+    User.findByPk(id).then(function (user) {
+      if (user) {
+        done(null, user.get());
+      } else {
+        done(user.errors, null);
+      }
+    });
+  });
   //LOCAL SIGNIN
   passport.use(
     "local-signin",
@@ -114,6 +123,7 @@ module.exports = function (passport, user) {
             }
 
             var userinfo = user.get();
+            console.log(userinfo);
             return done(null, userinfo);
           })
           .catch(function (err) {
