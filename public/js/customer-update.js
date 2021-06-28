@@ -53,7 +53,6 @@ $(document).ready(function () {
     if (
       !$("#firstNameInput").val().trim().trim() ||
       !$("#lastNameInput").val().trim().trim() ||
-      !$("#dobInput").val().trim().trim() ||
       !$("#phoneInput").val().trim().trim()
     ) {
       alert("You are missing a required field!");
