@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     dob: {
-      type: DataTypes.DATEONLY,
-      // allowNull: false,
-      validate: {
-        isDate: true,
-      },
+      type: DataTypes.STRING,
+      // allowNull: true,
+      // validate: {
+      //   isDate: true,
+      // },
     },
     phone: {
       type: DataTypes.STRING(20),
