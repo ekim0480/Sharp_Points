@@ -36,6 +36,11 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    hasAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
     last_login: {
       type: DataTypes.DATE,
     },

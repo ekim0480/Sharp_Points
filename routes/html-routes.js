@@ -10,15 +10,15 @@ var passport = require("passport");
 // Routes
 // =============================================================
 module.exports = function (app) {
-  // app.post(
-  //   "/signup",
-  //   notLoggedIn,
-  //   passport.authenticate("local-signup", {
-  //     successRedirect: "/",
+  app.post(
+    "/signup",
+    notLoggedIn,
+    passport.authenticate("local-signup", {
+      successRedirect: "/",
 
-  //     failureRedirect: "/signup",
-  //   })
-  // );
+      failureRedirect: "/signup",
+    })
+  );
 
   app.post(
     "/signin",
@@ -47,6 +47,7 @@ module.exports = function (app) {
   });
 
   function isLoggedIn(req, res, next) {
+    // console.log("req", req.email)
     if (req.isAuthenticated()) return next();
 
     res.redirect("/signin");
@@ -57,6 +58,16 @@ module.exports = function (app) {
       res.redirect("/");
     }
     next();
+  }
+
+  function hasAdmin(req, res, next) {
+    console.log("req.user", req.user);
+    if (req.isAuthenticated() && req.user.hasAdmin == true) {
+      return next();
+    } else {
+      res.status(403);
+      return res.send("Access denied");
+    }
   }
 
   // Each of the below routes just handles the HTML page that the user gets sent to.
@@ -94,5 +105,10 @@ module.exports = function (app) {
   // route to get e-mail list
   app.get("/emailList", isLoggedIn, function (req, res) {
     res.sendFile(path.join(__dirname, "../public/email-list.html"));
+  });
+
+  // route to accounting/profits
+  app.get("/admin", isLoggedIn, hasAdmin, function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/admin.html"));
   });
 };
