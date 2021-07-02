@@ -8,7 +8,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    return queryInterface.addcolumn('Sales', 'profit', {
+    return queryInterface.addColumn('Sales', 'profit', {
       type: Sequelize.DECIMAL(10, 2),
       defaultValue: "0.00",
       allowNull: true,
