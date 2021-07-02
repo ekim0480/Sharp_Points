@@ -3,8 +3,38 @@ $(document).ready(function () {
   var customerList = $("tbody");
   var customerContainer = $("#customer-container");
 
-  // Getting initial list of customers
+  // setting global variable to hold info if user has admin or not
+  // var hasAdmin;
+
+  // getting initial list of customers
   getCustomers();
+
+  // Function for retrieving customers and getting them ready to be rendered to the page
+  // we use async function to wait for user data first to see if they have admin
+  // so we can render our page accordingly
+  async function getCustomers() {
+    // retrieve user data to see if they have admin
+    $.get("/userData", function (data) {
+      // reassign global variable
+      hasAdmin = data.hasAdmin;
+
+      // if admin, add profits link to navbar
+      if (hasAdmin == true) {
+        $("#profitsNav").append(
+          '<a class="nav-link" href="/profits">Profits</a>'
+        );
+      }
+      // once user data retrieval is complete, then run the rest
+    }).then(function () {
+      $.get("/customers", function (data) {
+        var rowsToAdd = [];
+        for (var i = 0; i < data.length; i++) {
+          rowsToAdd.push(createCustomerRow(data[i]));
+        }
+        renderCustomerList(rowsToAdd);
+      });
+    });
+  }
 
   // click event listener for customer delete button
   $(document).on("click", "#deleteCustomer", handleCustomerDelete);
@@ -37,18 +67,6 @@ $(document).ready(function () {
       "<td><a style='cursor:pointer;color:red' id='deleteCustomer'>Delete Customer</a></td>"
     );
     return newTr;
-  }
-
-  // Function for retrieving customers and getting them ready to be rendered to the page
-  function getCustomers() {
-    $.get("/customers", function (data) {
-      var rowsToAdd = [];
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-        rowsToAdd.push(createCustomerRow(data[i]));
-      }
-      renderCustomerList(rowsToAdd);
-    });
   }
 
   // A function for rendering the list of customers to the page

@@ -39,6 +39,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "0.00",
       allowNull: true,
     },
+    profit: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: "0.00",
+      allowNull: true,
+    },
     points: {
       type: DataTypes.INTEGER(10),
       allowNull: true,

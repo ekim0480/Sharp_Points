@@ -108,7 +108,7 @@ module.exports = function (app) {
   });
 
   // route to accounting/profits
-  app.get("/admin", isLoggedIn, hasAdmin, function (req, res) {
-    res.sendFile(path.join(__dirname, "../public/admin.html"));
+  app.get("/profits", isLoggedIn, hasAdmin, function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/profits.html"));
   });
 };

@@ -9,7 +9,7 @@ module.exports = function (app) {
       // include: [db.Mileage],
       order: [["lastName", "ASC"]],
     }).then(function (dbCustomer) {
-      res.json(dbCustomer);
+      res.json(dbCustomer), { user: req.user };
     });
   });
 
