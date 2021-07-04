@@ -21,7 +21,11 @@ $(document).ready(function () {
   $(document).on("click", "#confirmRedeemBtn", handleConfirmRedeem);
   $(document).on("click", "#addMileageBtn", handleAddMileage);
   $(document).on("click", "#deleteMileage", handleMileageDelete);
-  // $(document).on("click", "#viewSale", handleViewSale)
+  $(document).on("submit", ".profitForm", handleProfitSubmit);
+
+  // set up global variable to hold user's admin status
+  var hasAdmin;
+
   // Variable to hold our sales
   var sales;
 
@@ -39,6 +43,25 @@ $(document).ready(function () {
   // If there's no customerId we just get all sales as usual
   else {
     getSales();
+  }
+
+  // function to get user data, more specifically, see if they have admin
+  // we use async function to wait for user data first to see if they have admin
+  // so we can render our page accordingly, async would not be necessary if
+  // we didn't need to render certain things depending on admin status
+  // but here, we do
+  async function getUser() {
+    $.get("/userData", function (data) {
+      // reassign global variable
+      hasAdmin = data.hasAdmin;
+      // if admin, add profits link to navbar
+      if (hasAdmin == true) {
+        $("#profitsNav").append(
+          '<a class="nav-link" href="/profits">Profits</a>'
+        );
+      }
+    });
+    return hasAdmin;
   }
 
   // function to GET a customer's data
@@ -95,20 +118,24 @@ $(document).ready(function () {
 
   // This function grabs sales from the database and updates the view
   function getSales(customer) {
-    // if customer id is present, print that get and print that customer's sales
-    customerId = customer || "";
-    if (customerId) {
-      customerId = "/?customer_id=" + customerId;
-    }
-    $.get("/sales" + customerId, function (data) {
-      console.log("Sales", data);
-      sales = data;
-      // if there are no sales, run displayEmpty
-      if (!sales || !sales.length) {
-        displayEmpty(customer);
-      } else {
-        initializeRows();
+    // retrieve user data to see if they have admin so we can render profits
+    // column if true
+    getUser().then(function () {
+      // if customer id is present, print that get and print that customer's sales
+      customerId = customer || "";
+      if (customerId) {
+        customerId = "/?customer_id=" + customerId;
       }
+      $.get("/sales" + customerId, function (data) {
+        console.log("Sales", data);
+        sales = data;
+        // if there are no sales, run displayEmpty
+        if (!sales || !sales.length) {
+          displayEmpty(customer);
+        } else {
+          initializeRows();
+        }
+      });
     });
   }
 
@@ -132,8 +159,31 @@ $(document).ready(function () {
     newTr.append("<td>" + saleData.arrivalDetails + "</td>");
     newTr.append("<td>" + saleData.arrivalDate + "</td>");
     newTr.append("<td>" + saleData.saleAmount + "</td>");
+
+    // if admin status is true, add a profits column to table
+    if (hasAdmin == true) {
+      console.log(saleData.profit);
+      $("#profitHeader").text("Profit");
+      // create an async function to append the row, with an input field
+      // we need async otherwise the next step won't apply properly
+      async function newProfitRows() {
+        newTr.append(
+          `<td id='profitColumn'><form class='profitForm'><input type='number' class='form-control profitInput' step='.01' value='${saleData.profit}'></form></td>`
+        );
+      }
+      // append the row, then...
+      newProfitRows().then(function () {
+        // function to automatically turn input into one with 2 decimal places
+        $(".profitInput").blur(function () {
+          var num = parseFloat($(this).val());
+          var cleanNum = num.toFixed(2);
+          $(this).val(cleanNum);
+        });
+      });
+    }
+
     newTr.append("<td>" + saleData.points + "</td>");
-    // newTr.append("<td><a id='viewSale' style='cursor:pointer;color:green'>View</a></td>");
+
     // add view/edit link
     newTr.append(
       "<td><a href='/saleUpdate?sale_id=" + saleData.id + "'>View/Edit</a></td>"
@@ -177,37 +227,6 @@ $(document).ready(function () {
       globalSearchExcludeColumns: [1, 2, 12, 13],
       inputPlaceholder: "Search All...",
     });
-
-    // // simplePagination.js code
-    // // Grab whatever we need to paginate
-    // var pageParts = $(".paginate");
-
-    // // How many parts do we have?
-    // var numPages = pageParts.length;
-    // // How many parts do we want per page?
-    // var perPage = 10;
-
-    // // When the document loads we're on page 1
-    // // So to start with... hide everything else
-    // pageParts.slice(perPage).hide();
-    // // Apply simplePagination to our placeholder
-    // $("#page-nav").pagination({
-    //   items: numPages,
-    //   itemsOnPage: perPage,
-    //   cssStyle: "light-theme",
-    //   // We implement the actual pagination
-    //   //   in this next function. It runs on
-    //   //   the event that a user changes page
-    //   onPageClick: function (pageNum) {
-    //     // Which page parts do we show?
-    //     var start = perPage * (pageNum - 1);
-    //     var end = start + perPage;
-
-    //     // First hide all page parts
-    //     // Then show those just for our page
-    //     pageParts.hide().slice(start, end).show();
-    //   },
-    // });
   }
 
   // function to handle new sale
@@ -271,11 +290,6 @@ $(document).ready(function () {
     // points were used
     var usedPointsOn = "Used " + `${parsedRedeemInput}` + " on " + `${today}`;
 
-    // console.log(pointTotal.text());
-    // console.log(parsedRedeemInput);
-    // console.log(parsedPointTotal);
-    // console.log(finalPointTotal);
-
     // set up object to be sent to database
     var updatedPoints = {
       type: "Points",
@@ -332,13 +346,60 @@ $(document).ready(function () {
     }
   }
 
+  // handles when enter is pressed to submit in profit input
+  function handleProfitSubmit(event) {
+    event.preventDefault();
+
+    // grab sale id
+    var saleId = $(this).closest("tr").children("td:nth-child(2)").text();
+
+    // grab value that was input
+    var profitInput = $(this).find(".profitInput").val();
+
+    // create object to send put request
+    var updateProfit = {
+      id: saleId,
+      profit: profitInput,
+    };
+
+    $.ajax({
+      method: "PUT",
+      url: "/profits",
+      contentType: "application/json",
+      data: JSON.stringify(updateProfit),
+      dataType: "json",
+    })
+
+    document.activeElement.blur()
+    // .then(function () {
+    //   // after update, re render table
+    //   // not very efficient, needs reworking
+    //   $(".fancySearchRow").remove();
+    //   $("#saleTableBody").empty();
+    //   getSales();
+    // });
+
+    // this block performs the query once user moves off of target field
+    // $(".profitForm").on("focusout", function(){
+    //   let do_query = true;
+    //   setTimeout(function(){
+    //      $(".profitForm:input").each(function(){
+    //        if($(this).is(":focus")){
+    //          do_query = false;
+    //          return false; //Exit the each loop
+    //        }
+    //      });
+
+    //      if(do_query){
+    //         console.log("I'm going to perform the query");
+    //      }
+
+    //   }, 200);
+    // });
+  }
+
   // This function handles the sale delete
   function handleSaleDelete() {
-    // extracting the data of the corresponding sale
-    // var listItemData = $(this).parent("td").parent("tr").data("sale");
-    // var testItemData = $(this).parent("td").parent("tr").children("td:nth-child(2)").text()
-    // console.log(testItemData);
-
     // workaround because fancyTable.js was messing with our jquery data
     // storage.  Included hidden columns containing both customer and
     // sale ids, and referred to text in "nth" columns to retreive the
@@ -398,16 +459,6 @@ $(document).ready(function () {
     }
   }
 
-  // This function handles the view link
-  // function handleViewSale(){
-  //   var listItemData = ($(this).parent("td").parent("tr").data("sale"))
-  //   console.log(listItemData)
-  //   document.write('<html><body><p id="origin"></p><p id="depDetails"></p><p id="depDate"></p></body></html>')
-  //   document.getElementById("origin").innerHTML = "Departure City: " + listItemData.origin
-  //   document.getElementById("depDetails").innerHTML = "Departing Flight: " + listItemData.depDetails
-  //   document.getElementById("depDate").innerHTML = "Departure Date: " + listItemData.depDate
-  // }
-
   // This function displays a message when there are no sales
   function displayEmpty() {
     var alertDiv = $("<div>");
@@ -422,7 +473,6 @@ $(document).ready(function () {
 
   function handleAddMileage(event) {
     event.preventDefault();
-
     if (
       $("#addMileageInput").val() == null ||
       $("#addMileageInput").val() == ""

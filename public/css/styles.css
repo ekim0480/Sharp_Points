@@ -107,3 +107,22 @@ legend {
 .authLinksDiv {
   margin-top: 15px;
 }
+
+td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.pag {
+  text-align: left;
+}
+
+#profitHeader {
+  width: 12%
+}
+/* #profitColumn {
+  width: 40px;
+} */
+.profitInput {
+  width: 100%;
+}

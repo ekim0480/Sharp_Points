@@ -7,6 +7,24 @@ $(document).ready(function () {
   var emailInput = $("#emailInput");
   // var mileageInput = $("#mileageInput");
 
+  // code block to get user admin status
+  var hasAdmin;
+
+  function getUser() {
+    $.get("/userData", function (data) {
+      // reassign global variable
+      hasAdmin = data.hasAdmin;
+      // if admin, add profits link to navbar
+      if (hasAdmin == true) {
+        $("#profitsNav").append(
+          '<a class="nav-link" href="/profits">Profits</a>'
+        );
+      }
+    });
+    return hasAdmin;
+  }
+  getUser();
+
   // if coming from the link to add customer after a search returned no
   // results, get the phone number from the url, and pre-insert it into the form
   var url = window.location.search;

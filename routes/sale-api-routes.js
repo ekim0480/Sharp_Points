@@ -31,6 +31,16 @@ module.exports = function (app) {
     });
   });
 
+  // app.get("/profits", function (req, res) {
+  //   console.log("body", req.body)
+  //   console.log("param", req.params)
+  //   db.Sale.findOne({
+  //     attributes: ['profit']
+  //   }).then(function (refreshedProfits){
+  //     res.json(refreshedProfits)
+  //   })
+  // })
+
   // post route to create a blank sale for point redemption
   // purposes
   app.post("/usedPoints", function (req, res) {
@@ -48,7 +58,6 @@ module.exports = function (app) {
   app.post("/sales", function (req, res) {
     var saleData = req.body;
     // console.log(req.body)
-
     db.Sale.create({
       type: saleData.type,
       origin: saleData.origin,
@@ -80,6 +89,18 @@ module.exports = function (app) {
       res.json(newSale);
     });
   });
+
+  // put route to update profit
+  app.put("/profits", function (req, res) {
+    db.Sale.update(req.body, {
+      profit: req.body.profit,
+      where: {
+        id: req.body.id
+      }
+    }).then(function (updatedProfit) {
+      res.json(updatedProfit)
+    })
+  })
 
   // delete route to delete a sale
   app.delete("/sales/:id", function (req, res) {

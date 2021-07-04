@@ -3,50 +3,54 @@ $(document).ready(function () {
   var customerList = $("tbody");
   var customerContainer = $("#customer-container");
 
-  // setting global variable to hold info if user has admin or not
-  // var hasAdmin;
+  // set up global variable to hold user's admin status
+  var hasAdmin;
 
-  // getting initial list of customers
-  getCustomers();
+  // click event listener for customer delete button
+  $(document).on("click", "#deleteCustomer", handleCustomerDelete);
+  $(document).on("click", "#showAllBtn", handleShowAll);
 
-  // Function for retrieving customers and getting them ready to be rendered to the page
+  // function to get user data, more specifically, see if they have admin
   // we use async function to wait for user data first to see if they have admin
-  // so we can render our page accordingly
-  async function getCustomers() {
-    // retrieve user data to see if they have admin
+  // so we can render our page accordingly, async would not be necessary if
+  // we didn't need to render certain things depending on admin status
+  // we do not need async here, look to customer details for async usage
+  function getUser() {
     $.get("/userData", function (data) {
       // reassign global variable
       hasAdmin = data.hasAdmin;
-
       // if admin, add profits link to navbar
       if (hasAdmin == true) {
         $("#profitsNav").append(
           '<a class="nav-link" href="/profits">Profits</a>'
         );
       }
-      // once user data retrieval is complete, then run the rest
-    }).then(function () {
-      $.get("/customers", function (data) {
-        var rowsToAdd = [];
-        for (var i = 0; i < data.length; i++) {
-          rowsToAdd.push(createCustomerRow(data[i]));
-        }
-        renderCustomerList(rowsToAdd);
-      });
     });
+    return hasAdmin;
   }
+  getUser();
 
-  // click event listener for customer delete button
-  $(document).on("click", "#deleteCustomer", handleCustomerDelete);
-  $(document).on("click", "#showAllBtn", handleShowAll);
+  // getting initial list of customers
+  getCustomers();
+
+  // Function for retrieving customers and getting them ready to be rendered to the page
+  function getCustomers() {
+    // retrieve user data to see if they have admin
+    // getUser().then(function () {
+    $.get("/customers", function (data) {
+      var rowsToAdd = [];
+      for (var i = 0; i < data.length; i++) {
+        rowsToAdd.push(createCustomerRow(data[i]));
+      }
+      renderCustomerList(rowsToAdd);
+    });
+    // });
+  }
 
   // Function for creating a new list row for customers
   function createCustomerRow(customerData) {
     // console.log(customerData);
     var newTr = $("<tr>");
-
-    // adding class for paginating with simplePaginatiom.js
-    // newTr.addClass("paginate");
 
     newTr.data("customer", customerData);
     // fancytables plugin was screwing up tr data storage above somehow
@@ -78,7 +82,6 @@ $(document).ready(function () {
       customerList.prepend(rows);
 
       // table pagination
-
       $("#customerTable").fancyTable({
         sortColumn: 1,
         sortable: false,
@@ -100,39 +103,6 @@ $(document).ready(function () {
           );
         },
       });
-
-      // $(".fancySearchRow").children("th:last").remove()
-
-      // // simplePagination.js code
-      // // Grab whatever we need to paginate
-      // var pageParts = $(".paginate");
-
-      // // How many parts do we have?
-      // var numPages = pageParts.length;
-      // // How many parts do we want per page?
-      // var perPage = 10;
-
-      // // When the document loads we're on page 1
-      // // So to start with... hide everything else
-      // pageParts.slice(perPage).hide();
-      // // Apply simplePagination to our placeholder
-      // $("#page-nav").pagination({
-      //   items: numPages,
-      //   itemsOnPage: perPage,
-      //   cssStyle: "light-theme",
-      //   // We implement the actual pagination
-      //   //   in this next function. It runs on
-      //   //   the event that a user changes page
-      //   onPageClick: function (pageNum) {
-      //     // Which page parts do we show?
-      //     var start = perPage * (pageNum - 1);
-      //     var end = start + perPage;
-
-      //     // First hide all page parts
-      //     // Then show those just for our page
-      //     pageParts.hide().slice(start, end).show();
-      //   },
-      // });
     } else {
       renderEmpty();
     }
