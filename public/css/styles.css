@@ -108,6 +108,11 @@ legend {
   margin-top: 15px;
 }
 
+th {
+  vertical-align: middle;
+  text-align: center;
+}
+
 td {
   vertical-align: middle;
   text-align: center;
@@ -126,3 +131,4 @@ td {
 .profitInput {
   width: 100%;
 }
+

@@ -59,6 +59,7 @@ $(document).ready(function () {
         $("#profitsNav").append(
           '<a class="nav-link" href="/profits">Profits</a>'
         );
+        $("#profitHeader").text("Profit");
       }
     });
     return hasAdmin;
@@ -160,10 +161,10 @@ $(document).ready(function () {
     newTr.append("<td>" + saleData.arrivalDate + "</td>");
     newTr.append("<td>" + saleData.saleAmount + "</td>");
 
-    // if admin status is true, add a profits column to table
+    // if admin status is true, add profit rows
     if (hasAdmin == true) {
       console.log(saleData.profit);
-      $("#profitHeader").text("Profit");
+      
       // create an async function to append the row, with an input field
       // we need async otherwise the next step won't apply properly
       async function newProfitRows() {
