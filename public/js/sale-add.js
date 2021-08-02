@@ -7,6 +7,24 @@ $(document).ready(function () {
     getCustomerData(customerId);
   }
 
+  // code block to get user admin status
+  var hasAdmin;
+
+  function getUser() {
+    $.get("/userData", function (data) {
+      // reassign global variable
+      hasAdmin = data.hasAdmin;
+      // if admin, add profits link to navbar
+      if (hasAdmin == true) {
+        $("#profitsNav").append(
+          '<a class="nav-link" href="/profits">Profits</a>'
+        );
+      }
+    });
+    return hasAdmin;
+  }
+  getUser();
+
   // declaring dom variables
   var typeInput = $("#typeInput");
   var originInput = $("#originInput");
@@ -17,6 +35,7 @@ $(document).ready(function () {
   var arrivalDateInput = $("#arrivalDateInput");
   var saleAmountInput = $("#saleAmountInput");
   var pointsInput = $("#pointsInput");
+  var accReceivableInput = $("#accReceivableInput")
   var notesInput = $("#notesInput");
   var remarksInput = $("#remarksInput");
 
@@ -45,6 +64,12 @@ $(document).ready(function () {
     var cleanNum = num.toFixed(2);
     $(this).val(cleanNum);
   });
+
+  accReceivableInput.blur(function() {
+    var num = parseFloat($(this).val())
+    var cleanNum = num.toFixed(2)
+    $(this).val(cleanNum)
+  })
 
   // Handling the automatic calculation of 1% of the sale value and automatically inputting it into points field.
 
@@ -121,6 +146,7 @@ $(document).ready(function () {
       arrivalDate: arrivalDateInput.val().trim(),
       saleAmount: saleAmountInput.val().trim(),
       points: pointsInput.val().trim(),
+      accountsReceivable: accReceivableInput.val().trim(),
       notes: notesInput.val().trim(),
       remarks: remarksInput.val().trim(),
       finalPoints: newPoints,

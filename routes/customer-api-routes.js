@@ -5,7 +5,6 @@ module.exports = function (app) {
   // route to get all customers
   app.get("/customers", function (req, res) {
     db.Customer.findAll({
-      // include: [db.Sale]
       // include: [db.Mileage],
       order: [["lastName", "ASC"]],
     }).then(function (dbCustomer) {

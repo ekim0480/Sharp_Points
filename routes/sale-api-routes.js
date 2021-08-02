@@ -2,7 +2,7 @@
 const db = require("../models");
 
 module.exports = function (app) {
-  // GET route for getting all of the sales
+  // GET route for getting the sales for a specific customer
   app.get("/sales", function (req, res) {
     var query = {};
     if (req.query.customer_id) {
@@ -68,6 +68,7 @@ module.exports = function (app) {
       arrivalDate: saleData.arrivalDate,
       saleAmount: saleData.saleAmount,
       points: saleData.points,
+      accountsReceivable: saleData.accountsReceivable,
       notes: saleData.notes,
       remarks: saleData.remarks,
       CustomerId: saleData.customerId,
@@ -99,6 +100,21 @@ module.exports = function (app) {
       }
     }).then(function (updatedProfit) {
       res.json(updatedProfit)
+    })
+  })
+
+  // put route to update a sale's accounts receivable when
+  // pay in full is clicked
+  app.put("/payInFull", function (req, res) {
+    console.log(req.body)
+    db.Sale.update(req.body, {
+      accountsReceivable: req.body.accountsReceivable,
+      notes: req.body.notes,
+      where: {
+        id: req.body.id
+      }
+    }).then(function (updatedAccountsReceivable) {
+      res.json(updatedAccountsReceivable)
     })
   })
 

@@ -54,6 +54,11 @@
             <li class="nav-item">
               <a class="nav-link" href="/emailList">E-mail List</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/accReceivable"
+                >Acc. Receivable</a
+              >
+            </li>
             <li class="nav-item" id="profitsNav"></li>
             <li class="nav-item" id="logoutLink">
               <a class="nav-link" href="/logout">Logout</a>
@@ -178,6 +183,17 @@
             />
           </div>
           <div class="mb-3">
+            <label for="accReceivableInput" class="form-label">Accounts Receivable</label>
+            <input
+              step=".01"
+              type="number"
+              value="0"
+              name="accReceivable"
+              id="accReceivableInput"
+              class="form-control regInput"
+            />
+          </div>
+          <div class="mb-3">
             <label for="notesInput" class="form-label">Notes</label>
             <textarea
               rows="5"
@@ -189,7 +205,7 @@
             ></textarea>
           </div>
           <div class="mb-3">
-            <label for="remarksInput" class="form-label">Remarks</label>
+            <label for="remarksInput" class="form-label">Remarks / Other Passengers</label>
             <textarea
               rows="5"
               type="text"

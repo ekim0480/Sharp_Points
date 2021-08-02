@@ -111,4 +111,9 @@ module.exports = function (app) {
   app.get("/profits", isLoggedIn, hasAdmin, function (req, res) {
     res.sendFile(path.join(__dirname, "../public/profits.html"));
   });
+
+  // route to accounts receivable
+  app.get("/accReceivable", isLoggedIn, function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/accounts-receivable.html"))
+  })
 };

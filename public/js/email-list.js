@@ -2,6 +2,24 @@ $(document).ready(function () {
   // event listener to handle when copy button is clicked
   $(document).on("click", "#copyText", handleCopyText);
 
+  // code block to get user admin status
+  var hasAdmin;
+
+  function getUser() {
+    $.get("/userData", function (data) {
+      // reassign global variable
+      hasAdmin = data.hasAdmin;
+      // if admin, add profits link to navbar
+      if (hasAdmin == true) {
+        $("#profitsNav").append(
+          '<a class="nav-link" href="/profits">Profits</a>'
+        );
+      }
+    });
+    return hasAdmin;
+  }
+  getUser();
+
   // run function to get all emails and print
   getEmails();
 

@@ -8,6 +8,24 @@ $(document).ready(function () {
     getSaleData(saleId);
   }
 
+  // code block to get user admin status
+  var hasAdmin;
+
+  function getUser() {
+    $.get("/userData", function (data) {
+      // reassign global variable
+      hasAdmin = data.hasAdmin;
+      // if admin, add profits link to navbar
+      if (hasAdmin == true) {
+        $("#profitsNav").append(
+          '<a class="nav-link" href="/profits">Profits</a>'
+        );
+      }
+    });
+    return hasAdmin;
+  }
+  getUser();
+
   // variable to hold some information related to the customer the
   // sale belongs to, as an array.
   // We need the customer's id, and how many points they currently have.
@@ -31,6 +49,7 @@ $(document).ready(function () {
   var arrivalDateInput = $("#arrivalDateInput");
   var saleAmountInput = $("#saleAmountInput");
   var pointsInput = $("#pointsInput");
+  var accReceivableInput = $("#accReceivableInput")
   var notesInput = $("#notesInput");
   var remarksInput = $("#remarksInput");
 
@@ -81,6 +100,7 @@ $(document).ready(function () {
       arrivalDateInput.val(data.arrivalDate);
       saleAmountInput.val(data.saleAmount);
       pointsInput.val(data.points);
+      accReceivableInput.val(data.accountsReceivable)
       notesInput.val(data.notes);
       remarksInput.val(data.remarks);
 
@@ -108,6 +128,12 @@ $(document).ready(function () {
 
   // function to automatically turn input into one with 2 decimal places
   saleAmountInput.blur(function () {
+    var num = parseFloat($(this).val());
+    var cleanNum = num.toFixed(2);
+    $(this).val(cleanNum);
+  });
+
+  accReceivableInput.blur(function () {
     var num = parseFloat($(this).val());
     var cleanNum = num.toFixed(2);
     $(this).val(cleanNum);
@@ -183,6 +209,7 @@ $(document).ready(function () {
       arrivalDate: arrivalDateInput.val().trim(),
       saleAmount: saleAmountInput.val().trim(),
       points: pointsInput.val().trim(),
+      accountsReceivable: accReceivableInput.val().trim(),
       notes: notesInput.val().trim(),
       remarks: remarksInput.val().trim(),
       finalPoints: customerPointsAfterUpdate,
