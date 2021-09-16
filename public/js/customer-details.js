@@ -229,7 +229,7 @@ $(document).ready(function () {
       globalSearch: true,
       // exclude first 2 columns, which are hidden and hold customer and
       // sale id values, and last 2 columns, which are links to view/delete
-      globalSearchExcludeColumns: [1, 2, 12, 13],
+      globalSearchExcludeColumns: [1, 2, 12, 13, 14, 15],
       inputPlaceholder: "Search All...",
     });
   }
