@@ -118,6 +118,13 @@ td {
   text-align: center;
 }
 
+.dateOfSale {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 125px;
+}
+
 .pag {
   text-align: left;
 }
@@ -129,6 +136,6 @@ td {
   width: 40px;
 } */
 .profitInput {
-  width: 100%;
+  width: 110px;
 }
 

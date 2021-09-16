@@ -152,6 +152,7 @@ $(document).ready(function () {
     newTr.data("sale", saleData);
     newTr.append("<td class='tableHeadId'>" + saleData.Customer.id + "</td>");
     newTr.append("<td class='tableHeadId'>" + saleData.id + "</td>");
+    newTr.append("<td class='dateOfSale'>" + saleData.createdAt + "</td>")
     newTr.append("<td>" + saleData.type + "</td>");
     newTr.append("<td>" + saleData.origin + "</td>");
     newTr.append("<td>" + saleData.depDetails + "</td>");
@@ -181,6 +182,9 @@ $(document).ready(function () {
           $(this).val(cleanNum);
         });
       });
+    } else {
+      // if not Admin, remove the profit column altogether
+      $("#profitHeader").remove()
     }
 
     newTr.append("<td>" + saleData.points + "</td>");
@@ -217,7 +221,7 @@ $(document).ready(function () {
 
     // table pagination
     $("#saleTable").fancyTable({
-      sortColumn: 1,
+      sortColumn: 3,
       pagination: true,
       paginationClass: "btn btn-link",
       sortable: false,
@@ -420,10 +424,18 @@ $(document).ready(function () {
     // subtracting the current sale's point value from the Customer's
     // original total point value.
     var customerOriginalTotalPoints = parseInt($("#pointTotal").text());
-    var salePointValue = parseInt(
-      $(this).parent("td").parent("tr").children("td:nth-child(11)").text()
-    );
-    // console.log(salePointValue)
+    // var salePointValue = 
+    if (hasAdmin == true) {
+      var salePointValue = parseInt(
+        $(this).parent("td").parent("tr").children("td:nth-child(13)").text()
+      );
+      console.log(salePointValue)
+    } else {
+      var salePointValue = parseInt(
+        $(this).parent("td").parent("tr").children("td:nth-child(12)").text()
+      );
+      console.log(salePointValue)
+    }
 
     // perform math to subtract this sale's points from the Customer's
     // original total points, and prepare to make put request
