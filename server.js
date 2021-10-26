@@ -8,6 +8,7 @@ if (process.env.NODE_ENV !== "production") {
 // Dependencies
 // =============================================================
 var express = require("express");
+var { wakeDyno } = require('heroku-keep-awake')
 
 // Requiring our models for syncing
 const db = require("./models");
@@ -16,6 +17,13 @@ const db = require("./models");
 // =============================================================
 var app = express();
 var PORT = process.env.PORT || 3000;
+
+var DYNO_URL = 'https://sharp-points.herokuapp.com'
+var opts = {
+  interval: 29,
+  stopTimes: { start: '08:00', end: '17:00' }
+}
+
 var passport = require("passport");
 var session = require("express-session");
 
@@ -52,6 +60,7 @@ require("./routes/user-api-routes.js")(app)
 // =============================================================
 db.sequelize.sync({ force: false }).then(function () {
   app.listen(PORT, function () {
+    wakeDyno(DYNO_URL, opts);
     console.log("App listening on PORT " + PORT);
   });
 });
