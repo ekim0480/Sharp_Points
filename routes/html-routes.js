@@ -9,16 +9,16 @@ var passport = require("passport");
 
 // Routes
 // =============================================================
-module.exports = function (app) {
-  app.post(
-    "/signup",
-    notLoggedIn,
-    passport.authenticate("local-signup", {
-      successRedirect: "/",
+// module.exports = function (app) {
+//   app.post(
+//     "/signup",
+//     notLoggedIn,
+//     passport.authenticate("local-signup", {
+//       successRedirect: "/",
 
-      failureRedirect: "/signup",
-    })
-  );
+//       failureRedirect: "/signup",
+//     })
+//   );
 
   app.post(
     "/signin",
