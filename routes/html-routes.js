@@ -9,7 +9,7 @@ var passport = require("passport");
 
 // Routes
 // =============================================================
-// module.exports = function (app) {
+module.exports = function (app) {
 //   app.post(
 //     "/signup",
 //     notLoggedIn,
